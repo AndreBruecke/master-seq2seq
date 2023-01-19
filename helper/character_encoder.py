@@ -14,7 +14,7 @@ class DictionaryCharacterEncoder:
         self.char_index = dict([(char, i) for i, char in enumerate(self.charset)])
 
     def encode(self, texts: Iterable, insert_markers=False, shift=False):
-        max_seq_length = max([len(t) for t in texts])
+        max_seq_length = max([len(t) for t in texts]) + (2 if insert_markers else 0)
         encoded_data = np.zeros((len(texts), max_seq_length, len(self.charset)), dtype="float32")
 
         for i, text in enumerate(texts):
