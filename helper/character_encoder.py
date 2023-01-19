@@ -24,6 +24,8 @@ class DictionaryCharacterEncoder:
                 if not shift or j > 0:
                     encoded_data[i, j - (1 if shift else 0), self.char_index[char]] = 1.0
             encoded_data[i, j + (0 if shift else 1):, self.char_index[' ']] = 1.0
+        
+        return encoded_data
 
     def decode(self):
         pass
