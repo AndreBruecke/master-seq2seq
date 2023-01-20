@@ -1,7 +1,7 @@
 import numpy as np
 
 from tensorflow import keras
-from character_encoder import DictionaryCharacterEncoder
+from .character_encoder import DictionaryCharacterEncoder
 
 
 def predict_sequence(dce: DictionaryCharacterEncoder, encoder_model: keras.Model, decoder_model: keras.Model, input_seq):
