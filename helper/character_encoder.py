@@ -38,6 +38,3 @@ class DictionaryCharacterEncoder:
             encoded_data[i, j + (0 if shift else 1):, self.char_index[' ']] = 1.0
         
         return encoded_data
-
-
-DictionaryCharacterEncoder()
