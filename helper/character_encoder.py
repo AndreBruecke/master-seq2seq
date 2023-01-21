@@ -40,17 +40,3 @@ class DictionaryCharacterEncoder:
             encoded_data[i, j + (0 if shift else 1):, self.char_index[' ']] = 1.0
         
         return encoded_data
-    
-    def encode_single(self, sequence: str):
-        """_Encodes a single sequence using character-level one-hot encoding._
-
-        Arguments:
-            sequence -- _String sequence to vectorize._
-        """
-        encoded_data = np.zeros(1, (self.max_seq_length, len(self.charset)), dtype="float32")
-        for j, char in enumerate(sequence):
-            char_pos = self.char_index[char] if char in self.char_index else self.char_index['§']
-            encoded_data[0, j, char_pos] = 1.0
-        encoded_data[0, j + 1:, self.char_index[' ']] = 1.0
-        
-        return encoded_data
