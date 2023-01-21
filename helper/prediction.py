@@ -4,7 +4,7 @@ from tensorflow import keras
 from .character_encoder import DictionaryCharacterEncoder
 
 
-def predict_sequence(dce: DictionaryCharacterEncoder, encoder_model: keras.Model, decoder_model: keras.Model, input_seq):
+def predict_sequence(dce: DictionaryCharacterEncoder, encoder_model: keras.Model, decoder_model: keras.Model, input_str: str):
     """_summary_
 
     Arguments:
@@ -16,6 +16,8 @@ def predict_sequence(dce: DictionaryCharacterEncoder, encoder_model: keras.Model
     Returns:
         _The decoded output sequence._
     """
+    input_seq = dce.encode([input_str])
+
     # Encode the input as state vectors.
     states_value = encoder_model.predict(input_seq, verbose=0)
 
