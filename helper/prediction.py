@@ -5,6 +5,17 @@ from .character_encoder import DictionaryCharacterEncoder
 
 
 def predict_sequence(dce: DictionaryCharacterEncoder, encoder_model: keras.Model, decoder_model: keras.Model, input_seq):
+    """_summary_
+
+    Arguments:
+        dce -- _Instance of the DictionaryCharacterEncoder used for decoding._
+        encoder_model -- _Keras encoder model._
+        decoder_model -- _Keras decoder model._
+        input_seq -- _description_
+
+    Returns:
+        _The decoded output sequence._
+    """
     # Encode the input as state vectors.
     states_value = encoder_model.predict(input_seq, verbose=0)
 
@@ -16,18 +27,18 @@ def predict_sequence(dce: DictionaryCharacterEncoder, encoder_model: keras.Model
     # Sampling loop for a batch of sequences
     # (to simplify, here we assume a batch of size 1).
     stop_condition = False
-    decoded_sentence = ""
+    decoded_seq = ''
     while not stop_condition:
         output_tokens, h, c = decoder_model.predict([target_seq] + states_value, verbose=0)
 
         # Sample a token
         sampled_token_index = np.argmax(output_tokens[0, -1, :])
         sampled_char = dce.inverse_char_index[sampled_token_index]
-        decoded_sentence += sampled_char
+        decoded_seq += sampled_char
 
         # Exit condition: either hit max length
         # or find stop character.
-        if sampled_char == "\n" or len(decoded_sentence) > dce.max_seq_length:
+        if sampled_char == '\n' or len(decoded_seq) > dce.max_seq_length:
             stop_condition = True
 
         # Update the target sequence (of length 1).
@@ -36,4 +47,4 @@ def predict_sequence(dce: DictionaryCharacterEncoder, encoder_model: keras.Model
 
         # Update states
         states_value = [h, c]
-    return decoded_sentence
+    return decoded_seq

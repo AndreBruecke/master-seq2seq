@@ -8,6 +8,8 @@ charsets = {
 
 
 class DictionaryCharacterEncoder:
+    """_Provides reproducible character-level vectorization._
+    """
 
     def __init__(self, charset='simple', max_seq_length=100):
         self.charset = charsets[charset] + ['§']  # Adds a special symbol, to which all unknown characters are mapped to during encoding.
@@ -24,17 +26,29 @@ class DictionaryCharacterEncoder:
             shift -- _Whether sequences should be shifted by one character._ (default: {False})
 
         Returns:
-            _Numpy array of shape (NUMBER_OF_SEQUENCES, MAX_SEQUENCE_LENGTH, CHARSET_SIZE)_
+            _Numpy array of shape (NUMBER_OF_SEQUENCES, MAX_SEQUENCE_LENGTH, CHARSET_SIZE)._
         """
         encoded_data = np.zeros((len(sequences), self.max_seq_length, len(self.charset)), dtype="float32")
 
-        for i, text in enumerate(sequences):
+        for i, seq in enumerate(sequences):
             if insert_markers:
-                text = '\t' + text + '\n'
-            for j, char in enumerate(text):
+                seq = '\t' + seq + '\n'
+            for j, char in enumerate(seq):
                 if not shift or j > 0:
                     char_pos = self.char_index[char] if char in self.char_index else self.char_index['§']
                     encoded_data[i, j - (1 if shift else 0), char_pos] = 1.0
             encoded_data[i, j + (0 if shift else 1):, self.char_index[' ']] = 1.0
         
         return encoded_data
+    
+    def encode_single(self, sequence: str):
+        """_Encodes a single sequence using character-level one-hot encoding._
+
+        Arguments:
+            sequence -- _String sequence to vectorize._
+        """
+        encoded_data = np.zeros((self.max_seq_length, len(self.charset)), dtype="float32")
+        for j, char in enumerate(sequence):
+            char_pos = self.char_index[char] if char in self.char_index else self.char_index['§']
+            encoded_data[j, char_pos] = 1.0
+        encoded_data[j + 1:, self.char_index[' ']] = 1.0
