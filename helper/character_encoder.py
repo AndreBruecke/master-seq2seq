@@ -47,8 +47,10 @@ class DictionaryCharacterEncoder:
         Arguments:
             sequence -- _String sequence to vectorize._
         """
-        encoded_data = np.zeros((self.max_seq_length, len(self.charset)), dtype="float32")
+        encoded_data = np.zeros(1, (self.max_seq_length, len(self.charset)), dtype="float32")
         for j, char in enumerate(sequence):
             char_pos = self.char_index[char] if char in self.char_index else self.char_index['§']
-            encoded_data[j, char_pos] = 1.0
-        encoded_data[j + 1:, self.char_index[' ']] = 1.0
+            encoded_data[0, j, char_pos] = 1.0
+        encoded_data[0, j + 1:, self.char_index[' ']] = 1.0
+        
+        return encoded_data
