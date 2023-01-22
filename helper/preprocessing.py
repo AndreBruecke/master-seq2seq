@@ -2,6 +2,8 @@ import pandas as pd
 
 import unicodedata as ud
 from unidecode import unidecode
+from rapidfuzz.distance import Levenshtein
+
 
 latin_letters = {}
 
@@ -47,3 +49,29 @@ def process_jrc(input_path: str, e_type: str='P'):
     pairs_df = pairs_df[~pairs_df['target'].str.contains(to_drop) & ~pairs_df['input'].str.contains(to_drop)]
 
     return pairs_df
+
+
+def process_common_name_collection(surname_path: str, givenname_path: str, dist_restriction: float=0.5):
+    surname_variant_df = pd.read_csv(surname_path, encoding='utf-8', header=None, names=['name', 'variants'])
+    givenname_variant_df = pd.read_csv(givenname_path, encoding='utf-8', header=None, names=['name', 'variants'])
+
+    surname_variant_df = surname_variant_df[~surname_variant_df['variants'].isna()]
+    surname_variant_df['variants'] = surname_variant_df['variants'].apply(lambda vs: vs.split(' '))
+    
+    surname_pairs_dict = { 'input': [], 'target': [] }
+    for _, row in surname_variant_df.iterrows():
+        for v in row['variants']:
+            dist_norm = Levenshtein.normalized_distance(row['name'], v)
+            if dist_norm <= dist_restriction:
+                surname_pairs_dict['input'].append(row['name'])
+                surname_pairs_dict['target'].append(v)
+
+    givenname_pairs_dict = { 'input': [], 'target': [] }
+    for _, row in givenname_variant_df.iterrows():
+        for v in row['variants']:
+            dist_norm = Levenshtein.normalized_distance(row['name'], v)
+            if dist_norm <= dist_restriction:
+                givenname_pairs_dict['input'].append(row['name'])
+                givenname_pairs_dict['target'].append(v)
+
+    return pd.DataFrame(surname_pairs_dict), pd.DataFrame(givenname_pairs_dict)
