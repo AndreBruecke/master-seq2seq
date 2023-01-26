@@ -20,7 +20,7 @@ def normalize(sequence: str):
     return unidecode(sequence.strip().lower())
 
 
-def process_jrc(input_path: str, e_type: str='P'):
+def process_jrc(input_path: str, e_type: str='P', length_restriction: int=70):
     jrc_df = pd.read_csv(input_path, sep='|', encoding='utf-8')
     jrc_df['name'] = jrc_df['name'].apply(lambda n: ' '.join([t.lower() for t in n.split('+')]))
     alphabet_mask = jrc_df['name'].apply(only_roman_chars)
@@ -36,6 +36,7 @@ def process_jrc(input_path: str, e_type: str='P'):
             pairs_dict['input'].append(input)
             pairs_dict['target'].append(target)
     pairs_df = pd.DataFrame(pairs_dict).drop_duplicates()
+    pairs_df = pairs_df[(pairs_df['input'].str.len() <= length_restriction) & (pairs_df['target'].str.len() <= length_restriction)]
     pairs_df['input'] = pairs_df['input'].apply(lambda s: s.lower().strip())
     pairs_df['target'] = pairs_df['target'].apply(lambda s: s.lower().strip())
 
