@@ -16,6 +16,10 @@ def only_roman_chars(unistr):
     return all(is_latin(uchr) for uchr in unistr if uchr.isalpha())
 
 
+def normalize(sequence: str):
+    return unidecode(sequence.strip().lower())
+
+
 def process_jrc(input_path: str, e_type: str='P'):
     jrc_df = pd.read_csv(input_path, sep='|', encoding='utf-8')
     jrc_df['name'] = jrc_df['name'].apply(lambda n: ' '.join([t.lower() for t in n.split('+')]))
