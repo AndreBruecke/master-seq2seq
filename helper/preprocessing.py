@@ -2,7 +2,7 @@ import pandas as pd
 
 import unicodedata as ud
 from unidecode import unidecode
-from rapidfuzz.distance import Levenshtein
+# from rapidfuzz.distance import Levenshtein
 
 
 latin_letters = {}
@@ -80,3 +80,8 @@ def process_common_name_collection(surname_path: str, givenname_path: str, dist_
                 givenname_pairs_dict['target'].append(v)
 
     return pd.DataFrame(surname_pairs_dict), pd.DataFrame(givenname_pairs_dict)
+
+
+def process_db_of_notable_people(input_path: str):
+    df = pd.read_csv(input_path, sep='|', encoding='utf-8', encoding_errors='replace')
+    df['name'] = df['name'].apply(lambda s: ' '.join(s.lower().split('_')))
