@@ -1,9 +1,13 @@
+import ast
 import pandas as pd
+import re
 
 import unicodedata as ud
 from unidecode import unidecode
-# from rapidfuzz.distance import Levenshtein
+from rapidfuzz.distance import Levenshtein
+import textdistance
 
+pd.options.display.width = 0
 
 latin_letters = {}
 
@@ -45,6 +49,7 @@ def process_jrc(input_path: str, e_type: str='P', length_restriction: int=70):
     to_replace = [
         ['`', '\''], [' & ', ' '], [' $ ', ' '], [' == ', ' '], [' << ', ' '], 
     ]
+
     def repl(s):
         for r in to_replace:
             s = s.replace(r[0], r[1])
@@ -85,3 +90,114 @@ def process_common_name_collection(surname_path: str, givenname_path: str, dist_
 def process_db_of_notable_people(input_path: str):
     df = pd.read_csv(input_path, sep='|', encoding='utf-8', encoding_errors='replace')
     df['name'] = df['name'].apply(lambda s: ' '.join(s.lower().split('_')))
+
+
+def denorm_movielens(cast_input_path: str, crew_input_path: str, cast_output_path: str, crew_output_path: str):
+    df = pd.read_csv(cast_input_path, sep='\t', encoding='utf-8')
+    df['cast'] = df['cast'].apply(ast.literal_eval)
+
+    def remove_unwanted_cast_attributes(col):
+        for e in col:
+            del e['cast_id']
+            del e['credit_id']
+            del e['order']
+            del e['profile_path']
+        return col
+
+    df['cast'] = df['cast'].apply(remove_unwanted_cast_attributes)
+    df = df.explode('cast').reset_index(drop=True)
+    cast_df = pd.json_normalize(df['cast'])
+    df = pd.concat([df[['id']], cast_df], axis=1)
+    df = df.rename(columns={'character': 'disambiguation'})
+    df.to_csv(cast_output_path, sep='\t', encoding='utf-8', index=False)
+    print(df.head())
+
+    df = pd.read_csv(crew_input_path, sep='\t', encoding='utf-8')
+    df['crew'] = df['crew'].apply(ast.literal_eval)
+
+    def remove_unwanted_crew_attributes(col):
+        for e in col:
+            del e['credit_id']
+            del e['department']
+            del e['profile_path']
+        return col
+
+    df['crew'] = df['crew'].apply(remove_unwanted_crew_attributes)
+    df = df.explode('crew').reset_index(drop=True)
+    crew_df = pd.json_normalize(df['crew'])
+    df = pd.concat([df[['id']], crew_df], axis=1)
+    df = df.rename(columns={'job': 'disambiguation'})
+    df.to_csv(crew_output_path, sep='\t', encoding='utf-8', index=False)
+    print(df.head())
+
+
+def denorm_imdb_selection(imdb_name_path: str, imdb_principals_path: str, out_path: str):
+    imdb_names = pd.read_csv(imdb_name_path, encoding='utf-8', sep='\t', dtype=str)
+    imdb_names = imdb_names.drop(['knownForTitles', 'primaryProfession', 'deathYear'], axis=1)
+
+    imdb_principals = pd.read_csv(imdb_principals_path, encoding='utf-8', sep='\t',
+                                  dtype=str)
+    imdb_principals = imdb_principals.drop(['ordering', 'job', 'characters'], axis=1)
+
+    denorm = imdb_names.merge(imdb_principals, on='nconst')
+    denorm.to_csv(out_path, index=False, sep='\t', encoding='utf-8')
+
+
+def combine_imdb_movielens():
+    imdb_df = pd.read_csv(ldir + 'imdb_in_movielens_denorm.tsv', sep='\t', encoding='utf-8', dtype=str)
+
+    movielens_links = pd.read_csv(ldir + 'kaggle_movielens_links.csv', sep=',', dtype=str)
+    movielens_links['tconst'] = movielens_links['imdbId'].apply(lambda i_id: 'tt' + i_id)
+    movielens_links = movielens_links.drop(['movieId', 'imdbId'], axis=1)
+
+    linked_df = imdb_df.merge(movielens_links, on='tconst')
+
+    movielens_cast = pd.read_csv(ldir + 'kaggle_movielens_credits_cast.denorm.csv', sep='\t', encoding='utf-8', dtype=str)
+    movielens_crew = pd.read_csv(ldir + 'kaggle_movielens_credits_crew.denorm.csv', sep='\t', encoding='utf-8', dtype=str)
+    movielens_names = pd.concat([movielens_cast, movielens_crew]).drop(['id.1'], axis=1)
+    movielens_names = movielens_names.rename(columns={'id': 'tmdbId'})
+
+    combined_df = linked_df.merge(movielens_names, on='tmdbId')
+    combined_df.to_csv(ldir + 'movielens_imdb_combined.tsv', sep='\t', index=False, encoding='utf-8')
+
+
+ldir = 'D:/HDa/Thesis/Repos/master-seq2seq/large_data/'
+"""
+combined_df = pd.read_csv(ldir + 'movielens_imdb_combined_dedup.tsv', sep='\t', encoding='utf-8')
+combined_df = combined_df[combined_df['imdb_name'] != combined_df['movielens_name']]
+combined_df = combined_df[combined_df['imdb_name'].str[0] == combined_df['movielens_name'].str[0]]
+combined_df.to_csv(ldir + 'movielens_imdb_combined_dedup_blocking.tsv', sep='\t', index=False, encoding='utf-8')
+
+
+potential_matches = pd.read_csv(ldir + 'movielens_imdb_combined_dedup_blocking.tsv', sep='\t', encoding='utf-8')
+potential_matches['ro_sim'] = 0
+
+for i, row in potential_matches.iterrows():
+    potential_matches.at[i, 'ro_sim'] = textdistance.ratcliff_obershelp.normalized_similarity(row['imdb_name'], row['movielens_name'])
+
+potential_matches.to_csv(ldir + 'movielens_imdb_combined_dedup_blocking_sim.tsv', sep='\t', encoding='utf-8')
+"""
+
+potential_matches = pd.read_csv(ldir + 'movielens_imdb_combined_dedup_blocking_sim.tsv', sep='\t', encoding='utf-8').drop(['ix'], axis=1)
+potential_matches['imdb_name'] = potential_matches['imdb_name'].apply(lambda s: s.strip())
+potential_matches['movielens_name'] = potential_matches['movielens_name'].apply(lambda s: s.strip())
+potential_matches = potential_matches[potential_matches['imdb_name'] != potential_matches['movielens_name']]
+likely_matches = potential_matches[potential_matches['ro_sim'] > 0.85]
+print(len(likely_matches))
+print(likely_matches.sort_values(by='ro_sim', ascending=True).head(60))
+
+
+"""
+temp = 'placeholder'
+with open(ldir + 'imdb_name.basics/data.tsv', encoding='utf-8') as f:
+    with open(ldir + 'imdb_name.basics/data-in-movielens.tsv', 'w', encoding='utf-8') as out_f:
+        for i, line in enumerate(f):
+            if i == 0:
+                out_f.write(line)
+                continue
+            elif i % 90000 == 0:
+                print('.', end='')
+            n_id = line.split('\t')[0]
+            if n_id in name_ids:
+                out_f.write(line)
+"""
