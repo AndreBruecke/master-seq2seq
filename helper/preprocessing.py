@@ -143,7 +143,7 @@ def denorm_imdb_selection(imdb_name_path: str, imdb_principals_path: str, out_pa
     denorm.to_csv(out_path, index=False, sep='\t', encoding='utf-8')
 
 
-def combine_imdb_movielens():
+def combine_imdb_movielens(ldir: str):
     imdb_df = pd.read_csv(ldir + 'imdb_in_movielens_denorm.tsv', sep='\t', encoding='utf-8', dtype=str)
 
     movielens_links = pd.read_csv(ldir + 'kaggle_movielens_links.csv', sep=',', dtype=str)
@@ -161,7 +161,7 @@ def combine_imdb_movielens():
     combined_df.to_csv(ldir + 'movielens_imdb_combined.tsv', sep='\t', index=False, encoding='utf-8')
 
 
-ldir = 'D:/HDa/Thesis/Repos/master-seq2seq/large_data/'
+# ldir = 'D:/HDa/Thesis/Repos/master-seq2seq/large_data/'
 """
 combined_df = pd.read_csv(ldir + 'movielens_imdb_combined_dedup.tsv', sep='\t', encoding='utf-8')
 combined_df = combined_df[combined_df['imdb_name'] != combined_df['movielens_name']]
@@ -176,7 +176,7 @@ for i, row in potential_matches.iterrows():
     potential_matches.at[i, 'ro_sim'] = textdistance.ratcliff_obershelp.normalized_similarity(row['imdb_name'], row['movielens_name'])
 
 potential_matches.to_csv(ldir + 'movielens_imdb_combined_dedup_blocking_sim.tsv', sep='\t', encoding='utf-8')
-"""
+
 
 potential_matches = pd.read_csv(ldir + 'movielens_imdb_combined_dedup_blocking_sim.tsv', sep='\t', encoding='utf-8').drop(['ix'], axis=1)
 potential_matches['imdb_name'] = potential_matches['imdb_name'].apply(lambda s: s.strip())
@@ -187,7 +187,7 @@ print(len(likely_matches))
 print(likely_matches.sort_values(by='ro_sim', ascending=True).head(60))
 
 
-"""
+
 temp = 'placeholder'
 with open(ldir + 'imdb_name.basics/data.tsv', encoding='utf-8') as f:
     with open(ldir + 'imdb_name.basics/data-in-movielens.tsv', 'w', encoding='utf-8') as out_f:

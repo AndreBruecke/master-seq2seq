@@ -62,7 +62,7 @@ def search_chunks(index_file_path: str, matches: Callable):
 
 
 # split_index_file('D:/HDa/Thesis/Repos/master-seq2seq/large_data/wiki_db_en/enwiki-20211020-pages-articles-multistream-index.txt', 'D:/HDa/Thesis/Repos/master-seq2seq/large_data/wiki_db_en/')
-write_unique_offsets('D:/HDa/Thesis/Repos/master-seq2seq/large_data/wiki_db_en/enwiki-20211020-pages-articles-multistream-index.txt', 'D:/HDa/Thesis/Repos/master-seq2seq/large_data/wiki_db_en/')
+# write_unique_offsets('D:/HDa/Thesis/Repos/master-seq2seq/large_data/wiki_db_en/enwiki-20211020-pages-articles-multistream-index.txt', 'D:/HDa/Thesis/Repos/master-seq2seq/large_data/wiki_db_en/')
 
 # search_chunks('D:/HDa/Thesis/Repos/master-seq2seq/large_data/wiki_db_en/enwiki-20211020-index__L.txt', match_alphabetical_film_categories)
 
