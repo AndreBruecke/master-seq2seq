@@ -40,3 +40,26 @@ class DictionaryCharacterEncoder:
             encoded_data[i, j + (0 if shift else 1):, self.char_index[' ']] = 1.0
         
         return encoded_data
+
+    def to_ids(self, sequences: Iterable, insert_markers=False, shift=False):
+        """_Encodes a collection of sequences using ids._
+
+        Arguments:
+            sequences -- _Iterable input sequences._
+            insert_markers -- _Whether sequences should to be wrapped with start/end markers._ (default: {False})
+            shift -- _Whether sequences should be shifted by one character._ (default: {False})
+
+        Returns:
+            _List of shape (NUMBER_OF_SEQUENCES, MAX_SEQUENCE_LENGTH)._
+        """
+        encoded_data = []
+
+        for i, seq in enumerate(sequences):
+            encoded_data.append([])
+            if insert_markers:
+                seq = '\t' + seq + '\n'
+            for j, char in enumerate(seq):
+                if not shift or j > 0:
+                    char_pos = self.char_index[char] if char in self.char_index else self.char_index['§']
+                    encoded_data[-1].append(char_pos)
+        return encoded_data
