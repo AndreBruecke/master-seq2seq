@@ -88,3 +88,6 @@ def load_chunks(mulitstream_path: str, out_folder: str, chunks: dict):
 
 # chunk_bounds = search_chunks('T:/MasterData/wikipedia_dump/index_split/enwiki-20211020-index__L.txt', 'T:/MasterData/wikipedia_dump/index_split/enwiki-20211020-index___OFFSETS.txt', match_alphabetical_film_categories)
 # load_chunks('T:/MasterData/wikipedia_dump/enwiki-20211020-pages-articles-multistream.xml.bz2', 'T:/MasterData/wikipedia_dump/xml_film_lists/', chunk_bounds)
+
+chunk_bounds = search_chunks('T:/MasterData/wikipedia_dump/index_split/enwiki-20211020-index__L.txt', 'T:/MasterData/wikipedia_dump/index_split/enwiki-20211020-index___OFFSETS.txt', match_lists_of_lists)
+load_chunks('T:/MasterData/wikipedia_dump/enwiki-20211020-pages-articles-multistream.xml.bz2', 'T:/MasterData/wikipedia_dump/xml_lists_of_lists/', chunk_bounds)
