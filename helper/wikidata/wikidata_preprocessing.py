@@ -88,6 +88,6 @@ def filter_pairs(df: pd.DataFrame) -> pd.DataFrame:
 # df.to_csv(label_file.replace('.tsv', '_filtered.tsv'), index=False, sep='\t', encoding='utf-8')
 # pairs_df = to_pairs(df)
 
-pairs_df = pd.read_csv(label_file.replace('.tsv', '_pairs.tsv'), sep='\t', encoding='utf-8')
-filter_pairs(pairs_df.copy(deep=True))
+# pairs_df = pd.read_csv(label_file.replace('.tsv', '_pairs.tsv'), sep='\t', encoding='utf-8')
+# filter_pairs(pairs_df.copy(deep=True))
 # pairs_df.to_csv(label_file.replace('.tsv', '_pairs.tsv'), index=False, sep='\t', encoding='utf-8')
