@@ -64,15 +64,15 @@ def filter_pairs(df: pd.DataFrame) -> pd.DataFrame:
 
     df['label_en'] = df['label_en'].apply(lambda l: re.split(r' +', l.lower()))
     df['label'] = df['label'].apply(lambda l: re.split(r' +', l.lower()))
-    print('Before:', len(df))
+
     df = df[df['label'].str.len() >= df['label_en'].str.len()]
     df = df[df['label'] != df['label_en']]
-    print('After:', len(df))
+
     df = df.apply(match_terms, axis=1)
     df = df[df['label'].str.len() > 1]
-    print('After term matching:', len(df))
+    
+    return df
 
-    print(df.head(50))
 
 
 # def transliteration_stats(in_file: str):
