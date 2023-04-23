@@ -81,7 +81,7 @@ def predict_sequence_label(dce: DictionaryCharacterEncoder, encoder_model: keras
         output_tokens, h, c = decoder_model.predict([target_seq] + states_value, verbose=0)
 
         # Sample a token
-        sampled_token_index = np.argmax(output_tokens[0, -1, :])
+        sampled_token_index = output_tokens[0, -1]
         sampled_char = dce.inverse_char_index[sampled_token_index]
         decoded_seq += sampled_char
 
