@@ -6,6 +6,8 @@ services:
     volumes:
       - ./data:/thesis/data
       - ./models:/thesis/models
+      - ./helper:/thesis/notebooks/helper
+      - ./notebooks:/thesis/notebooks
     deploy:
       resources:
         reservations:
