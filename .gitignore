@@ -1,6 +1,7 @@
 # Data
 large_data/
 models/test_*/weights.data-*
+models/test_*/checkpoints/
 
 # Pycharm
 .idea/
