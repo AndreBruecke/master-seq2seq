@@ -2,6 +2,7 @@ numpy
 pandas
 matplotlib
 jupyterlab
+keras-nlp
 
 rapidfuzz
 unidecode
