@@ -1,7 +1,7 @@
 import pandas as pd
 import tensorflow as tf
 
-def prepare_batches(df: pd.DataFrame, dce: DictionaryCharacterEncoder, num_samples: int, validation_split: float, batch_size: int, random_state: int):
+def prepare_batches(df: pd.DataFrame, dce, num_samples: int, validation_split: float, batch_size: int, random_state: int):
     def prepare_batch_char(input, target):
         input = input.to_tensor()
         target_inputs = target[:, :-1].to_tensor()  # Drop end boundary (\n)
