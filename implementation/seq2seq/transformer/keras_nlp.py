@@ -1,5 +1,6 @@
 import pandas as pd
 import tensorflow as tf
+import keras_nlp
 
 def prepare_batches(df: pd.DataFrame, dce, num_samples: int, validation_split: float, batch_size: int, random_state: int):
     def prepare_batch_char(input, target):
@@ -45,3 +46,41 @@ def prepare_batches(df: pd.DataFrame, dce, num_samples: int, validation_split: f
 
     return train_batches, val_batches
 
+
+def construct_model_w_teacher_forcing(num_encoder_layers: int, num_decoder_layers: int, unique_tokens: int, max_seq_length: int, embedding_dim: int, intermediate_dim: int, encoder_heads: int, decoder_heads: int, dropout: float):
+    encoder_inputs = tf.keras.Input(shape=(max_seq_length+2,), name='encoder_inputs')
+    token_embeddings = tf.keras.layers.Embedding(input_dim=unique_tokens, output_dim=embedding_dim)(encoder_inputs)
+    position_embeddings = keras_nlp.layers.PositionEmbedding(sequence_length=max_seq_length+2)(token_embeddings)
+    encoder_outputs = token_embeddings + position_embeddings
+
+    # Encoder
+    for i in range(num_encoder_layers):
+        encoder_outputs = keras_nlp.layers.TransformerEncoder(intermediate_dim=intermediate_dim, num_heads=encoder_heads, dropout=dropout)(inputs=encoder_outputs)
+
+    encoder = tf.keras.Model(encoder_inputs, encoder_outputs)
+
+    decoder_inputs = tf.keras.Input(shape=(None,), dtype='int64', name='decoder_inputs')
+    encoded_seq_inputs = tf.keras.Input(shape=(None, embedding_dim), name='decoder_state_inputs')
+
+    token_embeddings = tf.keras.layers.Embedding(input_dim=unique_tokens, output_dim=embedding_dim)(decoder_inputs)
+    position_embeddings = keras_nlp.layers.PositionEmbedding(sequence_length=max_seq_length+2)(token_embeddings)
+    decoder_outputs = token_embeddings + position_embeddings
+
+    # Decoder
+    for i in range(num_decoder_layers):
+        decoder_outputs = keras_nlp.layers.TransformerDecoder(intermediate_dim=intermediate_dim, num_heads=decoder_heads, dropout=dropout)(decoder_sequence=decoder_outputs, encoder_sequence=encoded_seq_inputs)
+
+    # decoder_outputs = tf.keras.layers.Dropout(0.25)(decoder_outputs)
+    decoder_outputs = tf.keras.layers.Dense(unique_tokens, activation="softmax")(decoder_outputs)
+
+
+    decoder = tf.keras.Model([decoder_inputs, encoded_seq_inputs], decoder_outputs)
+    decoder_outputs = decoder([decoder_inputs, encoder_outputs])
+
+    transformer = tf.keras.Model(
+        [encoder_inputs, decoder_inputs],
+        decoder_outputs,
+        name='transformer_w_tf',
+    )
+
+    return transformer
