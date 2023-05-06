@@ -63,3 +63,19 @@ class DictionaryCharacterEncoder:
                     char_pos = self.char_index[char] if char in self.char_index else self.char_index['§']
                     encoded_data[-1].append(char_pos)
         return encoded_data
+    
+    def from_ids(self, sequences: Iterable):
+        """_Decodes a collection of sequences._
+
+        Arguments:
+            sequences -- _Iterable sequences of ids._
+
+        Returns:
+            _List of decoded sequences._
+        """
+        decoded_data = []
+
+        for seq in sequences:
+            decoded_seq = [self.inverse_char_index[id] for id in seq]
+            decoded_data.append(''.join(decoded_seq).strip())
+        return decoded_data
