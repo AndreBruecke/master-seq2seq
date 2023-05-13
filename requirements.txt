@@ -2,7 +2,8 @@ numpy
 pandas
 matplotlib
 jupyterlab
-keras-nlp
+keras-nlp==0.4.1
+
 
 rapidfuzz
 unidecode
