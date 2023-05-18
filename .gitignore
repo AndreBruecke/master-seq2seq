@@ -3,6 +3,9 @@ large_data/
 models/test_*/weights.data-*
 models/test_*/checkpoints/
 
+# Docs
+*.drawio.bkp
+
 # Pycharm
 .idea/
 

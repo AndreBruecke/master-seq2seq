@@ -1,7 +1,12 @@
 import pandas as pd
+import os
 import re
+import sys
 
+from abydos.phonetic import FuzzySoundex
 from unidecode import unidecode
+from fuzzyset import FuzzySet
+
 
 label_file = 'T:/MasterData/wikidata_dump/human_labels.tsv'
 focussed_languages = dict([(char, i) for i, char in enumerate(['en', 'fr', 'de', 'nl', 'it', 'es', 'pt', 'pl', 'sq', 'sv', 'cs', 'hu', 'da', 'sl', 'fi', 'nn', 'tr', 'lv', 'vi', 'id'])])
@@ -73,6 +78,38 @@ def filter_pairs(df: pd.DataFrame) -> pd.DataFrame:
     
     return df
 
+def remove_distant_pairs(df: pd.DataFrame) -> pd.DataFrame:
+    cp_df = df.copy(deep=True)
+    # pe = FuzzySoundex(max_length=8)
+    cp_df['label'] = cp_df['label'].apply(normalize).apply(lambda l: re.split(r' +', l.lower()))
+    cp_df['label_en'] = cp_df['label_en'].apply(normalize).apply(lambda l: re.split(r' +', l.lower()))
+    # df['label_phntc'] = df['label'].apply(lambda l: [pe.encode_alpha(p) for p in l])
+    # df['label_en_phntc'] = df['label_en'].apply(lambda l: [pe.encode_alpha(p) for p in l])
+    
+    drop_msk = []
+    for ix, row in cp_df.iterrows():
+        if ix % 10000 == 0:
+            print(f'{ix} done, only {len(df)-ix} left to process.')
+        l = FuzzySet(use_levenshtein=True)
+        r = FuzzySet(use_levenshtein=True)
+        for tkn in row['label']: l.add(tkn)
+        for tkn in row['label_en']: r.add(tkn)
+        l_scores = [l.get(tkn) for tkn in row['label_en']]
+        r_scores = [r.get(tkn) for tkn in row['label']]
+        if any([e is None for e in l_scores]) or any([e is None for e in r_scores]) or any([e[0][0] < 0.2 for e in l_scores]) or any([e[0][0] < 0.2 for e in r_scores]):
+            l_chars_missing = 0
+            r_chars_missing = 0
+            for i in range(len(l_scores)):
+                if l_scores[i] is None or l_scores[i][0][0] < 0.2:
+                    l_chars_missing += len(row['label_en'][i])
+            for i in range(len(r_scores)):
+                if r_scores[i] is None or r_scores[i][0][0] < 0.2:
+                    r_chars_missing += len(row['label'][i])
+            if l_chars_missing > 2 or r_chars_missing > 2:
+                drop_msk.append(False)
+                continue
+        drop_msk.append(True)
+    return df[drop_msk]
 
 
 # def transliteration_stats(in_file: str):
@@ -88,6 +125,6 @@ def filter_pairs(df: pd.DataFrame) -> pd.DataFrame:
 # df.to_csv(label_file.replace('.tsv', '_filtered.tsv'), index=False, sep='\t', encoding='utf-8')
 # pairs_df = to_pairs(df)
 
-# pairs_df = pd.read_csv(label_file.replace('.tsv', '_pairs.tsv'), sep='\t', encoding='utf-8')
-# filter_pairs(pairs_df.copy(deep=True))
-# pairs_df.to_csv(label_file.replace('.tsv', '_pairs.tsv'), index=False, sep='\t', encoding='utf-8')
+pairs_df = pd.read_csv(label_file.replace('.tsv', '_pairs.tsv'), sep='\t', encoding='utf-8')
+pairs_df = remove_distant_pairs(pairs_df)
+pairs_df.to_csv(label_file.replace('.tsv', '_pairs_distfilter.tsv'), index=False, sep='\t', encoding='utf-8')

@@ -1,0 +1,49 @@
+<mxfile host="Electron" modified="2023-05-18T19:03:09.504Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="CUbXmD5fegVceMLjoMJ3" version="21.2.8" type="device">
+  <diagram name="Seite-1" id="vqr6X_JvffJOveLPrpp1">
+    <mxGraphModel dx="2074" dy="1196" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ShQBvHWZm992MQuMFdrx-1" value="Personen" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;dashPattern=8 8;strokeColor=#999999;align=center;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="560" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-2" value="JRC&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;(Type: Person)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="120" y="100" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-3" value="&lt;b&gt;Wikidata&lt;br&gt;&lt;/b&gt;(Type: Human)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="100" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-4" value="Companies" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;dashPattern=8 8;strokeColor=#999999;align=center;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="670" y="80" width="190" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-5" value="Locations" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;dashPattern=8 8;strokeColor=#999999;align=center;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="880" y="80" width="190" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-6" value="JRC&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;(Type: Entity)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="690" y="100" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-7" value="&lt;b&gt;Wikidata&lt;br&gt;&lt;/b&gt;(Type: TODO)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="160" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-8" value="&lt;b&gt;Geonames&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="100" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-9" value="to_lowercase" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="210" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-10" value="remove_diacritics" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="250" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-11" value="filter_non_unicode" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="165" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-12" value="filter_low_similarity" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="330" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ShQBvHWZm992MQuMFdrx-13" value="remove_affixes" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="290" width="120" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
