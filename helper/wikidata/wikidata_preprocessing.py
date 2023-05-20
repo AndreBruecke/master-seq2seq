@@ -109,7 +109,9 @@ def remove_distant_pairs(df: pd.DataFrame) -> pd.DataFrame:
                 drop_msk.append(False)
                 continue
         drop_msk.append(True)
-    return df[drop_msk]
+    df = df[drop_msk]
+    df = df[df['label'] != df['label_en']]
+    return df
 
 
 # def transliteration_stats(in_file: str):

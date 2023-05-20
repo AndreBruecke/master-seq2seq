@@ -1,5 +1,6 @@
 # Data
 large_data/
+data/pipeline_inputs/
 models/test_*/weights.data-*
 models/test_*/checkpoints/
 
