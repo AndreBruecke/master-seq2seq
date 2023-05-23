@@ -13,6 +13,10 @@ def filter_titles(df: pd.DataFrame) -> pd.DataFrame:
     df = df[~df['target'].str.contains(r',.*?')]
     return df
 
+def filter_special_characters(df: pd.DataFrame, to_drop=r'#|=|<|>|~|\?|\*|@|\d|\.\.|\{|\}|\+|&|\\|!|%|:|\[|\]|"|_|\(|\)') -> pd.DataFrame:
+    # Filters out entries that contain special characters
+    return df[~df['input'].str.contains(to_drop) & ~df['target'].str.contains(to_drop)]
+
 def filter_distant_pairs(df: pd.DataFrame, distance_threshold: float = 0.2) -> pd.DataFrame:
     # Filter pairs 
     cp_df = df.copy(deep=True)
@@ -43,5 +47,15 @@ def filter_distant_pairs(df: pd.DataFrame, distance_threshold: float = 0.2) -> p
     df = df[drop_msk]
     return df
 
+def filter_different_token_length_pairs(df: pd.DataFrame) -> pd.DataFrame:
+    df['input_split'] = df['input'].apply(lambda l: re.split(r'( +|-)', l))
+    df['target_split'] = df['target'].apply(lambda l: re.split(r'( +|-)', l))
+
+    df = df[df['input_split'].str.len() == df['target_split'].str.len()]    
+    return df.drop(['input_split', 'target_split'], axis=1)
+
 def filter_equal(df: pd.DataFrame) -> pd.DataFrame:
     return df[df['input'] != df['target']]
+
+def drop_duplicates(df: pd.DataFrame) -> pd.DataFrame:
+    return df.drop_duplicates()

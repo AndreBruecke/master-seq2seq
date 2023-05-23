@@ -17,3 +17,10 @@ def remove_brackets(series: pd.Series) -> pd.Series:
 def remove_abbreviations(series: pd.Series) -> pd.Series:
     # Remove abbreviations, e.g. "George W. Bush" -> "George Bush"
     return series.apply(lambda l: re.sub(r' ([A-Za-z]\.)+ ', ' ', l).strip())
+
+def replace_characters(series: pd.Series, to_replace=[['`','\''], [' & ',' '], [' $ ',' '], [' == ',' '], [' << ',' '],]) -> pd.Series:
+    def repl(s):
+        for r in to_replace:
+            s = s.replace(r[0], r[1])
+        return s
+    return series.apply(repl)

@@ -1,6 +1,7 @@
 import pandas as pd
 
-def wikidata_to_pairs(df: pd.DataFrame) -> pd.DataFrame:
+def wikidata_to_pairs(input_path: str) -> pd.DataFrame:
+    df = pd.read_csv(input_path, sep='\t', encoding='utf-8')
     # Filter out entities that occur only once
     agg = df[['id', 'lang']].groupby(by='id', as_index=False).count()
     agg = agg[agg['lang'] > 1]
@@ -21,5 +22,5 @@ def wikidata_to_pairs(df: pd.DataFrame) -> pd.DataFrame:
             pairs_dict['input'].append(label_en)
             pairs_dict['target'].append(label)
             pairs_dict['lang'].append(lang)
-    pairs_df = pd.DataFrame(pairs_dict)            
+    pairs_df = pd.DataFrame(pairs_dict)
     return pairs_df[pairs_df['lang'] != 'en']
