@@ -11,55 +11,46 @@ SDN_ALT = './data/pipeline_inputs/us_sdn_alt.pip'
 
 # UNPROCESSED input/target pairs (after running connectors)
 WIKIDATA_HUMAN_PAIRS = './data/pipeline_inputs/wikidata_human_pairs.csv'
+WIKIDATA_HUMAN_VARIANT_LIST = './data/pipeline_inputs/wikidata_human_variant_list.csv'
 JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
 
 # PROCESSED pairs
 WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_person_similar_pairs_norm.csv'
 JRC_P_SIMILAR_PAIRS_NORMALIZED = './data/jrc_person_similar_pairs_norm.csv'
 
-steps = {
-    'filter_titles': filter_titles,
-    'filter_special_characters': filter_special_characters,
-    'filter_distant_pairs': filter_distant_pairs,
-    'filter_different_token_length_pairs': filter_different_token_length_pairs,
-    'filter_equal_pairs': filter_equal,
-    'drop_duplicates': drop_duplicates,
-    'to_lower': to_lower,
-    'remove_diacritics': remove_diacritics,
-    'remove_brackets': remove_brackets,
-    'remove_abbreviations': remove_abbreviations,
-    'replace_characters': replace_characters,
-}
-
 pipelines = {
     'wikidata_similar_pairs_normalized': [
         # Pipeline to create WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
-        { 'name': 'filter_titles', 'columns': None, 'params': None },
-        { 'name': 'remove_brackets', 'columns': ['input', 'target'], 'params': None },
-        { 'name': 'remove_abbreviations', 'columns': ['input', 'target'], 'params': None },
-        { 'name': 'remove_diacritics', 'columns': ['input', 'target'], 'params': None },
-        { 'name': 'to_lower', 'columns': ['input', 'target'], 'params': None },
-        { 'name': 'filter_distant_pairs', 'columns': None, 'params': {'distance_threshold': 0.35} },
-        { 'name': 'filter_different_token_length_pairs', 'columns': None, 'params': None },
-        { 'name': 'filter_equal_pairs', 'columns': None, 'params': None },
+        { 'func': filter_titles, 'columns': None, 'params': None },
+        { 'func': remove_brackets, 'columns': ['input', 'target'], 'params': None },
+        { 'func': remove_abbreviations, 'columns': ['input', 'target'], 'params': None },
+        { 'func': remove_diacritics, 'columns': ['input', 'target'], 'params': None },
+        { 'func': to_lower, 'columns': ['input', 'target'], 'params': None },
+        { 'func': filter_distant_pairs, 'columns': None, 'params': {'distance_threshold': 0.35} },
+        { 'func': filter_different_token_length_pairs, 'columns': None, 'params': None },
+        { 'func': filter_equal, 'columns': None, 'params': None },
     ],
     'jrc_similar_pairs_normalized': [
         # Pipeline to create JRC_P_SIMILAR_PAIRS_NORMALIZED
-        { 'name': 'remove_diacritics', 'columns': ['input', 'target'], 'params': None },
-        { 'name': 'replace_characters', 'columns': ['input', 'target'], 'params': {'to_replace': [['`','\''], [' & ',' '], [' $ ',' '], [' == ',' '], [' << ',' '],]} },
-        { 'name': 'filter_special_characters', 'columns': None, 'params': {'to_drop': r'#|=|<|>|~|\?|\*|@|\d|\.\.|\{|\}|\+|&|\\|!|%|:|\[|\]|"|_|\(|\)'} },
-        { 'name': 'to_lower', 'columns': ['input', 'target'], 'params': None },
-        { 'name': 'filter_equal_pairs', 'columns': None, 'params': None },
-        { 'name': 'drop_duplicates', 'columns': None, 'params': None },
-        { 'name': 'filter_distant_pairs', 'columns': None, 'params': {'distance_threshold': 0.35} },
-        { 'name': 'filter_different_token_length_pairs', 'columns': None, 'params': None },
+        { 'func': remove_diacritics, 'columns': ['input', 'target'], 'params': None },
+        { 'func': replace_characters, 'columns': ['input', 'target'], 'params': {'to_replace': [['`','\''], [' & ',' '], [' $ ',' '], [' == ',' '], [' << ',' '],]} },
+        { 'func': filter_special_characters, 'columns': None, 'params': {'to_drop': r'#|=|<|>|~|\?|\*|@|\d|\.\.|\{|\}|\+|&|\\|!|%|:|\[|\]|"|_|\(|\)'} },
+        { 'func': to_lower, 'columns': ['input', 'target'], 'params': None },
+        { 'func': filter_equal, 'columns': None, 'params': None },
+        { 'func': drop_duplicates, 'columns': None, 'params': None },
+        { 'func': filter_distant_pairs, 'columns': None, 'params': {'distance_threshold': 0.35} },
+        { 'func': filter_different_token_length_pairs, 'columns': None, 'params': None },
+    ],
+    'wikidata_to_en_normalized': [
+        # Pipeline to create JRC_P_TO_EN_NORMALIZED based on WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
+        
     ]
 }
 
 
 def run_step(data, step_def):
-    print(f"\t> Running step: {step_def['name']}")
-    func = steps[step_def['name']]
+    print(f"\t> Running step: {step_def['func'].__name__}")
+    func = step_def['func']
     if step_def['columns'] is None:
         if step_def['params'] is None:
             return func(data)
