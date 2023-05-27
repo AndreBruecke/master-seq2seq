@@ -16,6 +16,8 @@ JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
 
 # PROCESSED pairs
 WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_person_similar_pairs_norm.csv'
+WIKIDATA_P_TO_EN_NORMALIZED = './data/wikidata_person_to_en_norm.csv'
+WIKIDATA_P_VARIANT_LIST_NORMALIZED = './data/wikidata_person_variant_list_norm.csv'
 JRC_P_SIMILAR_PAIRS_NORMALIZED = './data/jrc_person_similar_pairs_norm.csv'
 
 pipelines = {
@@ -42,8 +44,20 @@ pipelines = {
         { 'func': filter_different_token_length_pairs, 'columns': None, 'params': None },
     ],
     'wikidata_to_en_normalized': [
-        # Pipeline to create JRC_P_TO_EN_NORMALIZED based on WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
-        
+        # Pipeline to create WIKIDATA_P_TO_EN_NORMALIZED based on WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
+        { 'func': lambda df: df.rename(columns={'input': 'target', 'target': 'input'}), 'columns': None, 'params': None }
+    ],
+    'wikidata_variant_list_normalized': [
+        # Pipeline to create WIKIDATA_P_VARIANT_LIST_NORMALIZED
+        { 'func': lambda df: df[['id', 'input', 'target']], 'columns': None, 'params': None },
+        { 'func': lambda t: t.fillna(''), 'columns': ['target'], 'params': None },
+        { 'func': remove_brackets, 'columns': ['input', 'target'], 'params': None },
+        { 'func': remove_abbreviations, 'columns': ['input', 'target'], 'params': None },
+        { 'func': remove_diacritics, 'columns': ['input', 'target'], 'params': None },
+        { 'func': to_lower, 'columns': ['input', 'target'], 'params': None },
+        { 'func': filter_different_token_length_variants, 'columns': None, 'params': {'keep_empty': True} },
+        { 'func': drop_duplicates, 'columns': None, 'params': None },
+        { 'func': filter_equal, 'columns': None, 'params': None },
     ]
 }
 
@@ -77,5 +91,5 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 
 
 if __name__ == '__main__':
-    # run_pipeline('jrc_similar_pairs_normalized', JRC_HUMAN_PAIRS, '|', JRC_P_SIMILAR_PAIRS_NORMALIZED)
+    run_pipeline('wikidata_variant_list_normalized', WIKIDATA_HUMAN_VARIANT_LIST, '|', WIKIDATA_P_VARIANT_LIST_NORMALIZED)
     pass

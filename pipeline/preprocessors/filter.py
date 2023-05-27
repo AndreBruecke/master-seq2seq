@@ -48,10 +48,27 @@ def filter_distant_pairs(df: pd.DataFrame, distance_threshold: float = 0.2) -> p
     return df
 
 def filter_different_token_length_pairs(df: pd.DataFrame) -> pd.DataFrame:
-    df['input_split'] = df['input'].apply(lambda l: re.split(r'( +|-)', l))
-    df['target_split'] = df['target'].apply(lambda l: re.split(r'( +|-)', l))
+    df['input_split'] = df['input'].apply(lambda l: re.split(r' +|-', l))
+    df['target_split'] = df['target'].apply(lambda l: re.split(r' +|-', l))
 
     df = df[df['input_split'].str.len() == df['target_split'].str.len()]    
+    return df.drop(['input_split', 'target_split'], axis=1)
+
+def filter_different_token_length_variants(df: pd.DataFrame, keep_empty=True) -> pd.DataFrame:
+    def filter_variants(row):
+        filtered = []
+        for v in row['target_split']:
+            if len(v) == len(row['input_split']): filtered.append(' '.join(v))
+        row['target'] = '#'.join(filtered)
+        if len(row['target']) < 1 and (not keep_empty or any([len(v) > 1 for v in row['target_split']])):
+            row['target'] = '<DROP>'
+        return row
+
+    df['input_split'] = df['input'].apply(lambda l: re.split(r' +|-', l))
+    df['target_split'] = df['target'].apply(lambda l: [re.split(r' +|-', v) for v in l.split('#')])
+
+    df = df.apply(filter_variants, axis=1)
+    df = df[df['target'] != '<DROP>']
     return df.drop(['input_split', 'target_split'], axis=1)
 
 def filter_equal(df: pd.DataFrame) -> pd.DataFrame:
