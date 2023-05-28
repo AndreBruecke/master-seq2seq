@@ -3,7 +3,8 @@ import numpy as np
 from typing import Iterable
 
 charsets = {
-    'simple': sorted(list(' \',-.abcdefghijklmnopqrstuvwxyz\t\n'))
+    'simple': sorted(list(' \',-.abcdefghijklmnopqrstuvwxyz\t\n')),
+    'simple_with_sep': sorted(list('# \',-.abcdefghijklmnopqrstuvwxyz\t\n')),
 }
 
 

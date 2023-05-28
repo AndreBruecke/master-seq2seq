@@ -20,6 +20,9 @@ WIKIDATA_P_TO_EN_NORMALIZED = './data/wikidata_person_to_en_norm.csv'
 WIKIDATA_P_VARIANT_LIST_NORMALIZED = './data/wikidata_person_variant_list_norm.csv'
 JRC_P_SIMILAR_PAIRS_NORMALIZED = './data/jrc_person_similar_pairs_norm.csv'
 
+# PROCESSED for evaluation
+JRC_P_TO_EN_EVALUATION = './data/evaluation/jrc_person_to_en_norm.csv'
+
 pipelines = {
     'wikidata_similar_pairs_normalized': [
         # Pipeline to create WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
@@ -58,6 +61,10 @@ pipelines = {
         { 'func': filter_different_token_length_variants, 'columns': None, 'params': {'keep_empty': True} },
         { 'func': drop_duplicates, 'columns': None, 'params': None },
         { 'func': filter_equal, 'columns': None, 'params': None },
+    ],
+    'jrc_to_en_evaluation': [
+        # Pipeline to create JRC_P_TO_EN_EVALUATION from JRC_P_SIMILAR_PAIRS_NORMALIZED
+        { 'func': lambda df: df[df['target_lang'] == 'en'], 'columns': None, 'params': None }
     ]
 }
 
@@ -91,5 +98,5 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 
 
 if __name__ == '__main__':
-    run_pipeline('wikidata_variant_list_normalized', WIKIDATA_HUMAN_VARIANT_LIST, '|', WIKIDATA_P_VARIANT_LIST_NORMALIZED)
+    run_pipeline('jrc_to_en_evaluation', JRC_P_SIMILAR_PAIRS_NORMALIZED, '|', JRC_P_TO_EN_EVALUATION)
     pass
