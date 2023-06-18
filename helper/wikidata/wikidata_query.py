@@ -5,12 +5,27 @@ from qwikidata.entity import WikidataItem
 from qwikidata.json_dump import WikidataJsonDump
 
 PROP_INSTANCE_OF = 'P31'
+PROP_COUNTRY = 'P17'
+
+# Human properties
 PROP_GENDER = 'P21'
 PROP_BIRTH = 'P569'
 PROP_GIVEN_NAME = 'P735'
 PROP_FAMILY_NAME = 'P734'
 
+# Organization properties
+PROP_SHORT_NAME = 'P1813'
+PROP_NATIVE_LABEL = 'P1705'
+
 QID_HUMAN = 'Q5'
+QID_ORGANIZATION = 'Q43229'
+QID_IORG = 'Q484652'
+QID_NGO = 'Q79913'
+QID_COMPANY = 'Q783794'
+QID_PCOMPANY = 'Q891723'
+QID_ENTERPRISE = 'Q6881511'
+QID_BUSINESS = 'Q4830453'
+
 
 latin_letters = {}
 def is_latin(uchr):
@@ -38,7 +53,7 @@ def parse_variants(en_label, entity_dict):
 
     return label_rows #, alias_rows
 
-def parse_attributes(entity: WikidataItem):
+def parse_human_attributes(entity: WikidataItem):
     claim_group = entity.get_truthy_claim_group(PROP_GENDER)
     gender_qids = [claim.mainsnak.datavalue.value['id'] for claim in claim_group if claim.mainsnak.snaktype == 'value']
     gender = '' if len(gender_qids) < 1 else gender_qids[0]
@@ -50,15 +65,21 @@ def parse_attributes(entity: WikidataItem):
     date = date.split('T')[0]
     return gender, date
 
+def parse_orga_attributes(entity: WikidataItem):
+    if 'descriptions' in entity._entity_dict and 'en' in entity._entity_dict['descriptions']:
+        return entity._entity_dict['descriptions']['en']['value'].strip()
+    return None
+
 
 dump_path = 'T:/MasterData/wikidata_dump/wikidata-20220103-all.json.gz'
 out_folder = 'T:/MasterData/wikidata_dump/'
 reader = WikidataJsonDump(dump_path)
 
-label_out_f = open(os.path.join(out_folder, 'human_labels.tsv'), 'w', encoding='utf-8')
+label_out_f = open(os.path.join(out_folder, 'organization_labels.tsv'), 'w', encoding='utf-8')
 label_out_f.write('id\tlang\tlabel\n')
-stats_out_f = open(os.path.join(out_folder, 'human_stats.tsv'), 'w', encoding='utf-8')
-stats_out_f.write('id\tgender\tdate_of_birth\titem_languages\n')
+stats_out_f = open(os.path.join(out_folder, 'organization_stats.tsv'), 'w', encoding='utf-8')
+stats_out_f.write('id\tdescription\titem_languages\n')
+
 # alias_out_f = open(os.path.join(out_folder, 'human_aliases.tsv'), 'w', encoding='utf-8')
 # alias_out_f.write('id\tlang\taliases\n')
 
@@ -73,14 +94,15 @@ for i, entity_dict in enumerate(reader):
         claim_group = entity.get_truthy_claim_group(PROP_INSTANCE_OF)
         instance_qids = [claim.mainsnak.datavalue.value['id'] for claim in claim_group if claim.mainsnak.snaktype == 'value']
 
-        if QID_HUMAN in instance_qids and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
+        # if QID_HUMAN in instance_qids and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
+        if (QID_ORGANIZATION in instance_qids or QID_NGO in instance_qids or QID_IORG in instance_qids or QID_COMPANY in instance_qids or QID_PCOMPANY in instance_qids or QID_ENTERPRISE in instance_qids or QID_BUSINESS in instance_qids) and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
             en_title = entity_dict['labels']['en']['value'].strip() if 'en' in entity_dict['labels'] else entity.get_enwiki_title()
             l_rows = parse_variants(en_title, entity_dict)
             label_out_f.write(l_rows)
-            gender, birth = parse_attributes(entity)
-            stats_out_f.write(f"{entity_dict['id']}\t{gender}\t{birth}\t{';'.join(entity_dict['labels'].keys())}\n")
+            # gender, birth = parse_human_attributes(entity)
+            desc = parse_orga_attributes(entity)
+            stats_out_f.write(f"{entity_dict['id']}\t{desc}\t{';'.join(entity_dict['labels'].keys())}\n")
             n_entities += 1
-
             if n_entities % 10000 == 0:
                 print('#Entities parsed:', n_entities, '\tFailures:', n_failures)
     except Exception as e:
