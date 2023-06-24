@@ -18,13 +18,21 @@ PROP_SHORT_NAME = 'P1813'
 PROP_NATIVE_LABEL = 'P1705'
 
 QID_HUMAN = 'Q5'
-QID_ORGANIZATION = 'Q43229'
-QID_IORG = 'Q484652'
-QID_NGO = 'Q79913'
-QID_COMPANY = 'Q783794'
-QID_PCOMPANY = 'Q891723'
-QID_ENTERPRISE = 'Q6881511'
-QID_BUSINESS = 'Q4830453'
+
+def is_orga(instance_qids) -> bool:
+    qids_to_check = ['Q891723', 'Q43229', 'Q783794', 'Q352450', 'Q157031', 'Q79913', 'Q167037', 'Q6881511', 'Q11032', 'Q8869', 'Q18127', 'Q11707', 'Q22687', 'Q216107', 'Q4830453', 'Q206361', 'Q380342', 'Q380962', 'Q180846', 'Q161726', 'Q219577', 'Q76470', 'Q134161', 
+                     'Q141683', 'Q149789', 'Q165758', 'Q166280', 'Q207320', 'Q187047', 'Q149985', 'Q155076', 'Q170161', 'Q157963', 'Q157165', 'Q213441', 'Q162157', 'Q129238', 'Q216931', 'Q217107', 'Q197952', 'Q163740', 'Q251927', 'Q941185', 'Q646164', 
+                     'Q261428', 'Q988108', 'Q967140', 'Q672386', 'Q294163', 'Q327333', 'Q319845', 'Q730038', 'Q728646', 'Q745109', 'Q745877', 'Q748019', 'Q765517', 'Q459195', 'Q484652', 'Q829080', 'Q563787', 'Q848507', 'Q567521', 'Q614084', 'Q865588', 
+                     'Q33685', 'Q27493', 'Q1156831', 'Q27686']
+    for qid in qids_to_check:
+        if qid in instance_qids: return True
+    return False
+
+def is_geo(instance_qids) -> bool:
+    qids_to_check = ['Q515', 'Q532', 'Q4022', 'Q1549591', 'Q486972', 'Q7930989', 'Q15284', 'Q23397', 'Q4421', 'Q8502', 'Q46831', 'Q23442', 'Q34876', 'Q39594', 'Q40080', 'Q46169', 'Q82794', 'Q93352', 'Q3957', 'Q47521', 'Q54050', 'Q12280', 'Q12284', 'Q15324']
+    for qid in qids_to_check:
+        if qid in instance_qids: return True
+    return False
 
 
 latin_letters = {}
@@ -70,14 +78,19 @@ def parse_orga_attributes(entity: WikidataItem):
         return entity._entity_dict['descriptions']['en']['value'].strip()
     return None
 
+def parse_geo_attributes(entity: WikidataItem):
+    if 'descriptions' in entity._entity_dict and 'en' in entity._entity_dict['descriptions']:
+        return entity._entity_dict['descriptions']['en']['value'].strip()
+    return None
+
 
 dump_path = 'T:/MasterData/wikidata_dump/wikidata-20220103-all.json.gz'
 out_folder = 'T:/MasterData/wikidata_dump/'
 reader = WikidataJsonDump(dump_path)
 
-label_out_f = open(os.path.join(out_folder, 'organization_labels.tsv'), 'w', encoding='utf-8')
+label_out_f = open(os.path.join(out_folder, 'organization_labels_2.tsv'), 'w', encoding='utf-8')
 label_out_f.write('id\tlang\tlabel\n')
-stats_out_f = open(os.path.join(out_folder, 'organization_stats.tsv'), 'w', encoding='utf-8')
+stats_out_f = open(os.path.join(out_folder, 'organization_stats_2.tsv'), 'w', encoding='utf-8')
 stats_out_f.write('id\tdescription\titem_languages\n')
 
 # alias_out_f = open(os.path.join(out_folder, 'human_aliases.tsv'), 'w', encoding='utf-8')
@@ -95,7 +108,7 @@ for i, entity_dict in enumerate(reader):
         instance_qids = [claim.mainsnak.datavalue.value['id'] for claim in claim_group if claim.mainsnak.snaktype == 'value']
 
         # if QID_HUMAN in instance_qids and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
-        if (QID_ORGANIZATION in instance_qids or QID_NGO in instance_qids or QID_IORG in instance_qids or QID_COMPANY in instance_qids or QID_PCOMPANY in instance_qids or QID_ENTERPRISE in instance_qids or QID_BUSINESS in instance_qids) and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
+        if is_orga(instance_qids) and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
             en_title = entity_dict['labels']['en']['value'].strip() if 'en' in entity_dict['labels'] else entity.get_enwiki_title()
             l_rows = parse_variants(en_title, entity_dict)
             label_out_f.write(l_rows)

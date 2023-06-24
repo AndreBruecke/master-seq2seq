@@ -4,6 +4,8 @@ from connectors import *
 
 # SOURCES
 WIKIDATA_HUMAN_QUERY_RESULT = './data/pipeline_inputs/wikidata_human_query_result.tsv'
+WIKIDATA_ORG_QUERY_RESULT = './data/pipeline_inputs/wikidata_organization_query_result.tsv'
+WIKIDATA_LOC_QUERY_RESULT = './data/pipeline_inputs/wikidata_location_query_result.tsv'
 JRC_ENTITIES = './data/pipeline_inputs/jrc_entities'
 # Evaluation sources
 SDN_NAMES = './data/pipeline_inputs/us_sdn_names.pip'
@@ -11,6 +13,8 @@ SDN_ALT = './data/pipeline_inputs/us_sdn_alt.pip'
 
 # UNPROCESSED input/target pairs (after running connectors)
 WIKIDATA_HUMAN_PAIRS = './data/pipeline_inputs/wikidata_human_pairs.csv'
+WIKIDATA_ORG_PAIRS = './data/pipeline_inputs/wikidata_organization_pairs.csv'
+WIKIDATA_LOC_PAIRS = './data/pipeline_inputs/wikidata_location_pairs.csv'
 WIKIDATA_HUMAN_VARIANT_LIST = './data/pipeline_inputs/wikidata_human_variant_list.csv'
 JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
 
@@ -98,5 +102,5 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 
 
 if __name__ == '__main__':
-    run_pipeline('jrc_to_en_evaluation', JRC_P_SIMILAR_PAIRS_NORMALIZED, '|', JRC_P_TO_EN_EVALUATION)
+    # run_pipeline('jrc_to_en_evaluation', JRC_P_SIMILAR_PAIRS_NORMALIZED, '|', JRC_P_TO_EN_EVALUATION)
     pass
