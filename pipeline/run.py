@@ -20,7 +20,10 @@ JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
 
 # PROCESSED pairs
 WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_person_similar_pairs_norm.csv'
+WIKIDATA_ORG_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_org_similar_pairs_norm.csv'
+WIKIDATA_LOC_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_loc_similar_pairs_norm.csv'
 WIKIDATA_P_TO_EN_NORMALIZED = './data/wikidata_person_to_en_norm.csv'
+WIKIDATA_LOC_TO_EN_NORMALIZED = './data/wikidata_loc_to_en_norm.csv'
 WIKIDATA_P_VARIANT_LIST_NORMALIZED = './data/wikidata_person_variant_list_norm.csv'
 JRC_P_SIMILAR_PAIRS_NORMALIZED = './data/jrc_person_similar_pairs_norm.csv'
 
@@ -30,6 +33,7 @@ JRC_P_TO_EN_EVALUATION = './data/evaluation/jrc_person_to_en_norm.csv'
 pipelines = {
     'wikidata_similar_pairs_normalized': [
         # Pipeline to create WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
+        { 'func': lambda df: df.fillna(''), 'columns': None, 'params': None },
         { 'func': filter_titles, 'columns': None, 'params': None },
         { 'func': remove_brackets, 'columns': ['input', 'target'], 'params': None },
         { 'func': remove_abbreviations, 'columns': ['input', 'target'], 'params': None },
@@ -102,5 +106,10 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 
 
 if __name__ == '__main__':
-    # run_pipeline('jrc_to_en_evaluation', JRC_P_SIMILAR_PAIRS_NORMALIZED, '|', JRC_P_TO_EN_EVALUATION)
+    # Connector usage
+    # df = wikidata_to_pairs(WIKIDATA_LOC_QUERY_RESULT)
+    # df.to_csv(WIKIDATA_LOC_PAIRS, sep='|', index=False, encoding='utf-8')
+    
+    # Pipeline
+    run_pipeline('wikidata_to_en_normalized', WIKIDATA_LOC_SIMILAR_PAIRS_NORMALIZED, '|', WIKIDATA_LOC_TO_EN_NORMALIZED)
     pass

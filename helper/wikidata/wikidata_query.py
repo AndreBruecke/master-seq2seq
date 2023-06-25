@@ -88,9 +88,9 @@ dump_path = 'T:/MasterData/wikidata_dump/wikidata-20220103-all.json.gz'
 out_folder = 'T:/MasterData/wikidata_dump/'
 reader = WikidataJsonDump(dump_path)
 
-label_out_f = open(os.path.join(out_folder, 'organization_labels_2.tsv'), 'w', encoding='utf-8')
+label_out_f = open(os.path.join(out_folder, 'location_labels_2.tsv'), 'w', encoding='utf-8')
 label_out_f.write('id\tlang\tlabel\n')
-stats_out_f = open(os.path.join(out_folder, 'organization_stats_2.tsv'), 'w', encoding='utf-8')
+stats_out_f = open(os.path.join(out_folder, 'location_stats_2.tsv'), 'w', encoding='utf-8')
 stats_out_f.write('id\tdescription\titem_languages\n')
 
 # alias_out_f = open(os.path.join(out_folder, 'human_aliases.tsv'), 'w', encoding='utf-8')
@@ -108,12 +108,12 @@ for i, entity_dict in enumerate(reader):
         instance_qids = [claim.mainsnak.datavalue.value['id'] for claim in claim_group if claim.mainsnak.snaktype == 'value']
 
         # if QID_HUMAN in instance_qids and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
-        if is_orga(instance_qids) and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
+        if is_geo(instance_qids) and entity.get_enwiki_title() is not None and len(entity.get_enwiki_title().strip()) > 0:
             en_title = entity_dict['labels']['en']['value'].strip() if 'en' in entity_dict['labels'] else entity.get_enwiki_title()
             l_rows = parse_variants(en_title, entity_dict)
             label_out_f.write(l_rows)
             # gender, birth = parse_human_attributes(entity)
-            desc = parse_orga_attributes(entity)
+            desc = parse_geo_attributes(entity)
             stats_out_f.write(f"{entity_dict['id']}\t{desc}\t{';'.join(entity_dict['labels'].keys())}\n")
             n_entities += 1
             if n_entities % 10000 == 0:
