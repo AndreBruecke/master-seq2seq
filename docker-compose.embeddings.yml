@@ -1,0 +1,18 @@
+services:
+  jupyter_embed:
+    build: ./embeddings
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./embeddings/data:/thesis/data
+      - ./embeddings/models:/thesis/models
+      - ./helper:/thesis/helper
+      - ./implementation:/thesis/implementation
+      - ./embeddings/notebooks:/thesis/notebooks
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

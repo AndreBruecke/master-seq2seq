@@ -1,0 +1,10 @@
+numpy
+pandas
+matplotlib
+jupyterlab
+torch
+
+
+rapidfuzz
+unidecode
+textdistance
