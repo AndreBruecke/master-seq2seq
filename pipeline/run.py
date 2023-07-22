@@ -17,6 +17,7 @@ WIKIDATA_ORG_PAIRS = './data/pipeline_inputs/wikidata_organization_pairs.csv'
 WIKIDATA_LOC_PAIRS = './data/pipeline_inputs/wikidata_location_pairs.csv'
 WIKIDATA_HUMAN_VARIANT_LIST = './data/pipeline_inputs/wikidata_human_variant_list.csv'
 JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
+NAMA_GROUPS = './data/pipeline_inputs/nama_groups.csv'
 
 # PROCESSED pairs
 WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_person_similar_pairs_norm.csv'
@@ -29,6 +30,7 @@ JRC_P_SIMILAR_PAIRS_NORMALIZED = './data/jrc_person_similar_pairs_norm.csv'
 
 # PROCESSED for evaluation
 JRC_P_TO_EN_EVALUATION = './data/evaluation/jrc_person_to_en_norm.csv'
+NAMA_EMBEDDINGS_TRAIN = './data/evaluation/nama_embeddings_train.csv'
 
 pipelines = {
     'wikidata_similar_pairs_normalized': [
@@ -73,6 +75,14 @@ pipelines = {
     'jrc_to_en_evaluation': [
         # Pipeline to create JRC_P_TO_EN_EVALUATION from JRC_P_SIMILAR_PAIRS_NORMALIZED
         { 'func': lambda df: df[df['target_lang'] == 'en'], 'columns': None, 'params': None }
+    ],
+    'nama_embeddings': [
+        # Pipeline to create NAMA_EMBEDDINGS_TRAIN from NAMA_GROUPS:
+        { 'func': lambda df: df.fillna(''), 'columns': None, 'params': None },
+        { 'func': remove_brackets, 'columns': ['group', 'target'], 'params': None },
+        { 'func': remove_diacritics, 'columns': ['group', 'target'], 'params': None },
+        { 'func': to_lower, 'columns': ['group', 'target'], 'params': None },
+        { 'func': drop_duplicates, 'columns': None, 'params': None },
     ]
 }
 
@@ -108,8 +118,9 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 if __name__ == '__main__':
     # Connector usage
     # df = wikidata_to_pairs(WIKIDATA_LOC_QUERY_RESULT)
-    # df.to_csv(WIKIDATA_LOC_PAIRS, sep='|', index=False, encoding='utf-8')
+    df = to_merged_groups([WIKIDATA_HUMAN_QUERY_RESULT, WIKIDATA_LOC_QUERY_RESULT, WIKIDATA_ORG_QUERY_RESULT])
+    df.to_csv(NAMA_GROUPS, sep='|', index=False, encoding='utf-8')
     
     # Pipeline
-    run_pipeline('wikidata_to_en_normalized', WIKIDATA_LOC_SIMILAR_PAIRS_NORMALIZED, '|', WIKIDATA_LOC_TO_EN_NORMALIZED)
+    run_pipeline('nama_embeddings', NAMA_GROUPS, '|', NAMA_EMBEDDINGS_TRAIN)
     pass
