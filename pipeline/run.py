@@ -17,7 +17,9 @@ WIKIDATA_ORG_PAIRS = './data/pipeline_inputs/wikidata_organization_pairs.csv'
 WIKIDATA_LOC_PAIRS = './data/pipeline_inputs/wikidata_location_pairs.csv'
 WIKIDATA_HUMAN_VARIANT_LIST = './data/pipeline_inputs/wikidata_human_variant_list.csv'
 JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
-NAMA_GROUPS = './data/pipeline_inputs/nama_groups.csv'
+SIMILARITY_HUMAN_GROUPS = './data/pipeline_inputs/similarity_human_groups.csv'
+SIMILARITY_LOC_GROUPS = './data/pipeline_inputs/similarity_loc_groups.csv'
+SIMILARITY_ORG_GROUPS = './data/pipeline_inputs/similarity_org_groups.csv'
 
 # PROCESSED pairs
 WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_person_similar_pairs_norm.csv'
@@ -30,7 +32,9 @@ JRC_P_SIMILAR_PAIRS_NORMALIZED = './data/jrc_person_similar_pairs_norm.csv'
 
 # PROCESSED for evaluation
 JRC_P_TO_EN_EVALUATION = './data/evaluation/jrc_person_to_en_norm.csv'
-NAMA_EMBEDDINGS_TRAIN = './data/evaluation/nama_embeddings_train.csv'
+SIMILARITY_P_TRAIN = './data/evaluation/similarity_p_train.csv'
+SIMILARITY_LOC_TRAIN = './data/evaluation/similarity_loc_train.csv'
+SIMILARITY_ORG_TRAIN = './data/evaluation/similarity_org_train.csv'
 
 pipelines = {
     'wikidata_similar_pairs_normalized': [
@@ -76,14 +80,15 @@ pipelines = {
         # Pipeline to create JRC_P_TO_EN_EVALUATION from JRC_P_SIMILAR_PAIRS_NORMALIZED
         { 'func': lambda df: df[df['target_lang'] == 'en'], 'columns': None, 'params': None }
     ],
-    'nama_embeddings': [
-        # Pipeline to create NAMA_EMBEDDINGS_TRAIN from NAMA_GROUPS:
+    'similarity_train': [
+        # Pipeline to create training data for similarity learning:
         { 'func': lambda df: df.fillna(''), 'columns': None, 'params': None },
-        { 'func': remove_brackets, 'columns': ['group', 'target'], 'params': None },
-        { 'func': remove_diacritics, 'columns': ['group', 'target'], 'params': None },
+        { 'func': remove_brackets, 'columns': ['target'], 'params': None },
+        { 'func': remove_diacritics, 'columns': ['target'], 'params': None },
+        { 'func': replace_characters, 'columns': ['target'], 'params': {'to_replace': [['"',''],]} },
         { 'func': to_lower, 'columns': ['group', 'target'], 'params': None },
         { 'func': drop_duplicates, 'columns': None, 'params': None },
-    ]
+    ],
 }
 
 
@@ -118,9 +123,15 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 if __name__ == '__main__':
     # Connector usage
     # df = wikidata_to_pairs(WIKIDATA_LOC_QUERY_RESULT)
-    df = to_merged_groups([WIKIDATA_HUMAN_QUERY_RESULT, WIKIDATA_LOC_QUERY_RESULT, WIKIDATA_ORG_QUERY_RESULT])
-    df.to_csv(NAMA_GROUPS, sep='|', index=False, encoding='utf-8')
+    df_p = to_merged_groups([WIKIDATA_HUMAN_QUERY_RESULT])
+    df_l = to_merged_groups([WIKIDATA_LOC_QUERY_RESULT])
+    df_o = to_merged_groups([WIKIDATA_ORG_QUERY_RESULT])
+    df_p.to_csv(SIMILARITY_HUMAN_GROUPS, sep='|', index=False, encoding='utf-8')
+    df_l.to_csv(SIMILARITY_LOC_GROUPS, sep='|', index=False, encoding='utf-8')
+    df_o.to_csv(SIMILARITY_ORG_GROUPS, sep='|', index=False, encoding='utf-8')
     
     # Pipeline
-    run_pipeline('nama_embeddings', NAMA_GROUPS, '|', NAMA_EMBEDDINGS_TRAIN)
+    run_pipeline('similarity_train', SIMILARITY_HUMAN_GROUPS, '|', SIMILARITY_P_TRAIN)
+    run_pipeline('similarity_train', SIMILARITY_LOC_GROUPS, '|', SIMILARITY_LOC_TRAIN)
+    run_pipeline('similarity_train', SIMILARITY_ORG_GROUPS, '|', SIMILARITY_ORG_TRAIN)
     pass
