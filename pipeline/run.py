@@ -7,6 +7,9 @@ WIKIDATA_HUMAN_QUERY_RESULT = './data/pipeline_inputs/wikidata_human_query_resul
 WIKIDATA_ORG_QUERY_RESULT = './data/pipeline_inputs/wikidata_organization_query_result.tsv'
 WIKIDATA_LOC_QUERY_RESULT = './data/pipeline_inputs/wikidata_location_query_result.tsv'
 JRC_ENTITIES = './data/pipeline_inputs/jrc_entities'
+TOPONYM_P = './data/pipeline_inputs/toponym_matching/dataset_final_jrc_person.csv'
+TOPONYM_ORG = './data/pipeline_inputs/toponym_matching/dataset_final_jrc_organization.csv'
+TOPONYM_LOC = './data/pipeline_inputs/toponym_matching/dataset-string-similarity.txt'
 # Evaluation sources
 SDN_NAMES = './data/pipeline_inputs/us_sdn_names.pip'
 SDN_ALT = './data/pipeline_inputs/us_sdn_alt.pip'
@@ -20,6 +23,9 @@ JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
 SIMILARITY_HUMAN_GROUPS = './data/pipeline_inputs/similarity_human_groups.csv'
 SIMILARITY_LOC_GROUPS = './data/pipeline_inputs/similarity_loc_groups.csv'
 SIMILARITY_ORG_GROUPS = './data/pipeline_inputs/similarity_org_groups.csv'
+TOPONYM_P_LABELED_PAIRS = './data/pipeline_inputs/toponym_p_labeled_pairs.csv'
+TOPONYM_ORG_LABELED_PAIRS = './data/pipeline_inputs/toponym_org_labeled_pairs.csv'
+TOPONYM_LOC_LABELED_PAIRS = './data/pipeline_inputs/toponym_loc_labeled_pairs.csv'
 
 # PROCESSED pairs
 WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED = './data/wikidata_person_similar_pairs_norm.csv'
@@ -35,6 +41,9 @@ JRC_P_TO_EN_EVALUATION = './data/evaluation/jrc_person_to_en_norm.csv'
 SIMILARITY_P_TRAIN = './data/evaluation/similarity_p_train.csv'
 SIMILARITY_LOC_TRAIN = './data/evaluation/similarity_loc_train.csv'
 SIMILARITY_ORG_TRAIN = './data/evaluation/similarity_org_train.csv'
+SIMILARITY_TOPONYM_P_SAMPLE = './data/evaluation/similarity_toponym_p_sample.csv'
+SIMILARITY_TOPONYM_LOC_SAMPLE = './data/evaluation/similarity_toponym_loc_sample.csv'
+SIMILARITY_TOPONYM_ORG_SAMPLE = './data/evaluation/similarity_toponym_org_sample.csv'
 
 pipelines = {
     'wikidata_similar_pairs_normalized': [
@@ -123,15 +132,15 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 if __name__ == '__main__':
     # Connector usage
     # df = wikidata_to_pairs(WIKIDATA_LOC_QUERY_RESULT)
-    df_p = to_merged_groups([WIKIDATA_HUMAN_QUERY_RESULT])
-    df_l = to_merged_groups([WIKIDATA_LOC_QUERY_RESULT])
-    df_o = to_merged_groups([WIKIDATA_ORG_QUERY_RESULT])
-    df_p.to_csv(SIMILARITY_HUMAN_GROUPS, sep='|', index=False, encoding='utf-8')
-    df_l.to_csv(SIMILARITY_LOC_GROUPS, sep='|', index=False, encoding='utf-8')
-    df_o.to_csv(SIMILARITY_ORG_GROUPS, sep='|', index=False, encoding='utf-8')
+    df_p = toponym_labeled_pairs_to_sample(TOPONYM_P_LABELED_PAIRS)
+    df_loc = toponym_labeled_pairs_to_sample(TOPONYM_LOC_LABELED_PAIRS)
+    df_org = toponym_labeled_pairs_to_sample(TOPONYM_ORG_LABELED_PAIRS)
+    df_p.to_csv(SIMILARITY_TOPONYM_P_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
+    df_loc.to_csv(SIMILARITY_TOPONYM_LOC_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
+    df_org.to_csv(SIMILARITY_TOPONYM_ORG_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
     
     # Pipeline
-    run_pipeline('similarity_train', SIMILARITY_HUMAN_GROUPS, '|', SIMILARITY_P_TRAIN)
-    run_pipeline('similarity_train', SIMILARITY_LOC_GROUPS, '|', SIMILARITY_LOC_TRAIN)
-    run_pipeline('similarity_train', SIMILARITY_ORG_GROUPS, '|', SIMILARITY_ORG_TRAIN)
+    # run_pipeline('similarity_train', SIMILARITY_HUMAN_GROUPS, '|', SIMILARITY_P_TRAIN)
+    # run_pipeline('similarity_train', SIMILARITY_LOC_GROUPS, '|', SIMILARITY_LOC_TRAIN)
+    # run_pipeline('similarity_train', SIMILARITY_ORG_GROUPS, '|', SIMILARITY_ORG_TRAIN)
     pass
