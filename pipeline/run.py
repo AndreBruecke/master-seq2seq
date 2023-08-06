@@ -10,6 +10,7 @@ JRC_ENTITIES = './data/pipeline_inputs/jrc_entities'
 TOPONYM_P = './data/pipeline_inputs/toponym_matching/dataset_final_jrc_person.csv'
 TOPONYM_ORG = './data/pipeline_inputs/toponym_matching/dataset_final_jrc_organization.csv'
 TOPONYM_LOC = './data/pipeline_inputs/toponym_matching/dataset-string-similarity.txt'
+GEONAMES = './data/pipeline_inputs/geonames.org/alternateNamesV2.txt'
 # Evaluation sources
 SDN_NAMES = './data/pipeline_inputs/us_sdn_names.pip'
 SDN_ALT = './data/pipeline_inputs/us_sdn_alt.pip'
@@ -23,6 +24,7 @@ JRC_HUMAN_PAIRS = './data/pipeline_inputs/jrc_human_pairs.csv'
 SIMILARITY_HUMAN_GROUPS = './data/pipeline_inputs/similarity_human_groups.csv'
 SIMILARITY_LOC_GROUPS = './data/pipeline_inputs/similarity_loc_groups.csv'
 SIMILARITY_ORG_GROUPS = './data/pipeline_inputs/similarity_org_groups.csv'
+GEONAMES_GROUPS = './data/pipeline_inputs/geonames_groups.csv'
 TOPONYM_P_LABELED_PAIRS = './data/pipeline_inputs/toponym_p_labeled_pairs.csv'
 TOPONYM_ORG_LABELED_PAIRS = './data/pipeline_inputs/toponym_org_labeled_pairs.csv'
 TOPONYM_LOC_LABELED_PAIRS = './data/pipeline_inputs/toponym_loc_labeled_pairs.csv'
@@ -132,13 +134,15 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
 if __name__ == '__main__':
     # Connector usage
     # df = wikidata_to_pairs(WIKIDATA_LOC_QUERY_RESULT)
-    df_p = toponym_labeled_pairs_to_sample(TOPONYM_P_LABELED_PAIRS)
-    df_loc = toponym_labeled_pairs_to_sample(TOPONYM_LOC_LABELED_PAIRS)
-    df_org = toponym_labeled_pairs_to_sample(TOPONYM_ORG_LABELED_PAIRS)
-    df_p.to_csv(SIMILARITY_TOPONYM_P_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
-    df_loc.to_csv(SIMILARITY_TOPONYM_LOC_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
-    df_org.to_csv(SIMILARITY_TOPONYM_ORG_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
-    
+    # df_p = toponym_labeled_pairs_to_sample(TOPONYM_P_LABELED_PAIRS)
+    # df_loc = toponym_labeled_pairs_to_sample(TOPONYM_LOC_LABELED_PAIRS)
+    # df_org = toponym_labeled_pairs_to_sample(TOPONYM_ORG_LABELED_PAIRS)
+    # df_p.to_csv(SIMILARITY_TOPONYM_P_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
+    # df_loc.to_csv(SIMILARITY_TOPONYM_LOC_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
+    # df_org.to_csv(SIMILARITY_TOPONYM_ORG_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
+    df = geonames_to_entities(GEONAMES)
+    df.to_csv(GEONAMES_GROUPS, sep='|', encoding='utf-8', index=False)
+
     # Pipeline
     # run_pipeline('similarity_train', SIMILARITY_HUMAN_GROUPS, '|', SIMILARITY_P_TRAIN)
     # run_pipeline('similarity_train', SIMILARITY_LOC_GROUPS, '|', SIMILARITY_LOC_TRAIN)
