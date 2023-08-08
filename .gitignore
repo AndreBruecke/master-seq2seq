@@ -5,6 +5,7 @@ models/test_*/weights.data-*
 models/test_*/checkpoints/
 models/nama*
 checkpoints/
+*.zip
 
 # Docs
 *.drawio.bkp

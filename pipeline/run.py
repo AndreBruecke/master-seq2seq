@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from preprocessors.normalize import *
 from preprocessors.filter import *
 from connectors import *
@@ -128,7 +130,6 @@ def run_pipeline(pipeline_name: str, input_path: str, input_sep: str, output_pat
     for step in pipelines[pipeline_name]:
         df = run_step(df, step)
     df.to_csv(output_path, sep='|', index=False, encoding='utf-8')
-
 
 
 if __name__ == '__main__':
