@@ -36,14 +36,16 @@ def prepare_batches(df: pd.DataFrame, dce, num_samples: int, validation_split: f
     # Construct datasets from tensors
     train_input_tensors = tf.ragged.constant(train_input_ids)
     train_target_tensors = tf.ragged.constant(train_target_ids)
-    val_input_tensors = tf.ragged.constant(val_input_ids)
-    val_target_tensors = tf.ragged.constant(val_target_ids)
     train_dataset = tf.data.Dataset.from_tensor_slices((train_input_tensors, train_target_tensors))
-    val_dataset = tf.data.Dataset.from_tensor_slices((val_input_tensors, val_target_tensors))
-
     train_batches = to_batches(train_dataset)
-    val_batches = to_batches(val_dataset)
 
+    val_batches = None
+    if validation_split > 0:
+        val_input_tensors = tf.ragged.constant(val_input_ids)
+        val_target_tensors = tf.ragged.constant(val_target_ids)
+        val_dataset = tf.data.Dataset.from_tensor_slices((val_input_tensors, val_target_tensors))
+        val_batches = to_batches(val_dataset)
+    
     return train_batches, val_batches
 
 
