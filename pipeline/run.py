@@ -8,11 +8,11 @@ from connectors import *
 WIKIDATA_HUMAN_QUERY_RESULT = './data/pipeline_inputs/wikidata_human_query_result.tsv'
 WIKIDATA_ORG_QUERY_RESULT = './data/pipeline_inputs/wikidata_organization_query_result.tsv'
 WIKIDATA_LOC_QUERY_RESULT = './data/pipeline_inputs/wikidata_location_query_result.tsv'
-JRC_ENTITIES = './data/pipeline_inputs/jrc_entities'
 TOPONYM_P = './data/pipeline_inputs/toponym_matching/dataset_final_jrc_person.csv'
 TOPONYM_ORG = './data/pipeline_inputs/toponym_matching/dataset_final_jrc_organization.csv'
 TOPONYM_LOC = './data/pipeline_inputs/toponym_matching/dataset-string-similarity.txt'
 GEONAMES = './data/pipeline_inputs/geonames.org/alternateNamesV2.txt'
+JRC_ENTITIES = './data/pipeline_inputs/jrc_entities'
 # Evaluation sources
 SDN_NAMES = './data/pipeline_inputs/us_sdn_names.pip'
 SDN_ALT = './data/pipeline_inputs/us_sdn_alt.pip'

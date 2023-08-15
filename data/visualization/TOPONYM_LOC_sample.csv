@@ -1,0 +1,101 @@
+input|target|label|lang1|lang2|count
+nahr umm as sukhul|nahr al mutanfakhan|FALSE|IQ|IQ|1
+bostadmyran|kvalsvedjan|FALSE|NO|NO|1
+abu karat|abu karat|TRUE|LY|LY|1
+cahar cineh|kuh-e chahar cheshmeh|FALSE|AF|AF|1
+amuro-baltiyskiy|amuro-baltiysk|TRUE|RU|RU|1
+endeli ragali|el uaie|FALSE|ET|ET|1
+hu tang|cuo mai|TRUE|CN|CN|1
+bakhshvand-e baraftab|bakhshvand-e baraftab|TRUE|IR|IR|1
+dong yan|tung-yen-chuang|TRUE|CN|CN|1
+bol'shoy rog|bol'shoj rodnik|FALSE|RU|RU|1
+taralang somon|botoumashin|FALSE|MN|MN|1
+savonnieres|savonnieres|TRUE|FR|FR|1
+akisik|akinek dagi|FALSE|TR|TR|1
+fabiao|xitlalu|FALSE|MZ|MZ|1
+sabac|szabacs|TRUE|RS|RS|1
+k'och'oyi tegh|k'och'oyi tegh|TRUE|AM|AM|1
+syd mhmd khlyft|sayyid muhammad khalifah|TRUE|IQ|IQ|1
+nawazi ummahat an naml|nawazi ummahat an-namel|TRUE|SA|SA|1
+wrsk|varsak railroad station|TRUE|IR|IR|1
+kuchian|kuchian|TRUE|PK|PK|1
+lwansha|lwansamuna|FALSE|ZM|ZM|1
+ujung tumpuk|tumpaan|FALSE|ID|ID|1
+shih-jung-ts'un|shi yi gu|FALSE|TW|TW|1
+bandalak-e safayd|bandalak-e sefid|TRUE|AF|AF|1
+shantian|lou qian|FALSE|CN|CN|1
+valviken|vallviken|TRUE|SE|SE|1
+urstrommen|urstrommen|TRUE|NO|NO|1
+pravaya tal'tsa|pad' solonyanka|FALSE|RU|RU|1
+ujungporis|ujungpatiro|FALSE|ID|ID|1
+jarvoken|jarvoken|TRUE|SE|SE|1
+tsukidate-mura|tsukitate-machi|TRUE|JP|JP|1
+cham razhan|barzah-e ramazan|FALSE|IR|IR|1
+robat-e shah 'abbasi|rahgan|FALSE|IR|IR|1
+marca-ayllo|ensenada de la mar brava|FALSE|PE|PE|1
+'umar kala|akhund khel|FALSE|AF|AF|1
+el qara|faydat al qar`a'|FALSE|SA|SA|1
+cheragh-e bimid|cheragh bemid|TRUE|IR|IR|1
+namikakeno kishi|lang xuanno an|TRUE|JP|JP|1
+khlong khot|khlong nueng sai|TRUE|TH|TH|1
+chib'yanshur|tsjiblega|FALSE|RU|RU|1
+meghapara chhandhara|meghdumbar|FALSE|BD|BD|1
+guoluoding|shang suo yi|FALSE|CN|CN|1
+scey-sur-saone|si sai mai xi ai|FALSE|FR|FR|1
+pannainen|benskar|FALSE|FI|FI|1
+mount andree|puerto de caballos|FALSE|HM|HN|1
+sungei sri menanti|lalang hill|FALSE|MY|MY|1
+cassissa|cachiombo|FALSE|AO|AO|1
+gugecun|zhang shan cun|FALSE|CN|CN|1
+quna|qumbaniyet luqin|FALSE|EG|EG|1
+kuh-e shahr|shahr|FALSE|AF|AF|1
+galatakion|galaros|FALSE|GR|GR|1
+xi tian bian ding|nishitama-gun|FALSE|JP|JP|1
+hintao|ban hin tea|TRUE|TH|TH|1
+po yang|guo long shang|FALSE|CN|CN|1
+staciunai|staciunu|FALSE|LT|LT|1
+dourtenga|durotenga|TRUE|BF|BF|1
+khosa obo chinah|khosa obo chinah|TRUE|AF|AF|1
+zinder|sindamoa|FALSE|NE|NE|1
+ma tai|tian zi ping|FALSE|CN|CN|1
+bol'shaya yelanka|bol'shaya yelanka|TRUE|RU|RU|1
+kuh-i-ganjineh|kazemabad|FALSE|IR|IR|1
+ma jia wan|nongfeng|FALSE|CN|CN|1
+sidi muhammad bin al qasim|sidi mohammed ben alia|FALSE|TN|TN|1
+nisellion|nesarion|TRUE|GR|GR|1
+plotsch|plechy / ploeckenstein|FALSE|CZ|CZ|1
+ruchsitenstoeckli|goggeien|TRUE|CH|CH|1
+wu mei ze|hei yan|FALSE|JP|JP|1
+mina' az zawr|mina' al ahmadi|FALSE|KW|KW|1
+kosoma|kasinda|FALSE|TD|TD|1
+kopylovskaya ket'|ket'|TRUE|RU|RU|1
+tallat samarah|qurnat samarah|FALSE|LB|LB|1
+shang cun|gu ping|FALSE|CN|CN|1
+tichilit el hradem|tichilit el baida|FALSE|MR|MR|1
+lunho|rio ungungui|FALSE|MZ|MZ|1
+guang kuo tian de|guangkuotiandi|TRUE|CN|CN|1
+ap lac hoa|lac hoa|TRUE|VN|VN|1
+huang xie tian lin chang|hou bao|FALSE|CN|CN|1
+kuro-ni|guri-si|FALSE|KR|KR|1
+estnes|gasorn|FALSE|FI|FI|1
+kani-ye senjed|kani jowz|FALSE|IR|IR|1
+ganel'ki|gonel'ki|TRUE|BY|BY|1
+ci zha kong ma|ma qing pu lai|FALSE|CN|CN|1
+bir aissa|bir 'abdallah|FALSE|DZ|DZ|1
+lan  pdw klh|lamsa|TRUE|FR|FR|1
+kavos vathiou|vathi|FALSE|GR|GR|1
+eariaru qiao|deo paelliseu obeu obeon hilseu|FALSE|US|US|1
+khnis|khenis|TRUE|TN|TN|1
+castrum gabiani|castel gabia|TRUE|IT|IT|1
+babenhauzen|babengauzen|TRUE|DE|DE|1
+ban wang kruat|ban wang krot|TRUE|TH|TH|1
+landar ta' geriska|mian kherreh|TRUE|MT|MT|1
+hangilga|seong-gongsa|FALSE|KR|KR|1
+da song|dasong|TRUE|CN|CN|1
+agawhome|agave apedome|FALSE|GH|GH|1
+galegong|ga lei gong|TRUE|CN|CN|1
+ponoyskiya ludy|ostrova ponoyskiye ludy|TRUE|RU|RU|1
+laken vlei|drie roode koppen|FALSE|ZA|ZA|1
+sedir cayi|sarihuyuk|FALSE|TR|TR|1
+seinajoki|synajwky|TRUE|FI|FI|1
+tunechody|tinchau|TRUE|CZ|CZ|1
