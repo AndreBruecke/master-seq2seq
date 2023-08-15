@@ -6,6 +6,7 @@ models/test_*/checkpoints/
 models/nama*
 checkpoints/
 *.zip
+*.rar
 
 # Docs
 *.drawio.bkp
