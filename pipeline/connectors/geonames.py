@@ -35,3 +35,12 @@ def geonames_to_entities(input_path: str) -> pd.DataFrame:
     df = df[['geonameid', 'name']]
     df = df.rename(columns={'geonameid': 'group', 'name': 'target'})
     return df
+
+
+def geonames_groups_to_pairs(input_path: str) -> pd.DataFrame:
+    df = pd.read_csv(input_path, sep='|', encoding='utf-8')
+    df = df.dropna().drop_duplicates()
+
+    df = df.merge(right=df, how='inner', on='group')
+    df = df.rename(columns={'target_x':'input', 'target_y':'target', 'group': 'id'}).reset_index(drop=True)
+    return df[df['input'] != df['target']]

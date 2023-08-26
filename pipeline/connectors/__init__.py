@@ -10,3 +10,4 @@ from connectors.toponym import toponym_to_labeled_pairs
 from connectors.toponym import toponym_labeled_pairs_to_sample
 
 from connectors.geonames import geonames_to_entities
+from connectors.geonames import geonames_groups_to_pairs
