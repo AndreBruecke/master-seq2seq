@@ -74,5 +74,14 @@ def filter_different_token_length_variants(df: pd.DataFrame, keep_empty=True) ->
 def filter_equal(df: pd.DataFrame) -> pd.DataFrame:
     return df[df['input'] != df['target']]
 
+def filter_large_token_diff(df: pd.DataFrame) -> pd.DataFrame:
+    x1 = df['input'].apply(lambda s: len(s.split(' ')))
+    x2 = df['target'].apply(lambda s: len(s.split(' ')))
+    mask = x2 - x1 <= 3
+    return df[mask]
+
+def filter_large_character_diff(df: pd.DataFrame) -> pd.DataFrame:
+    return df[(df['target'].str.len() - df['input'].str.len()) <= 25]
+
 def drop_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop_duplicates()

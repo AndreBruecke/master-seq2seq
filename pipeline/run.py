@@ -73,12 +73,15 @@ pipelines = {
         { 'func': filter_equal, 'columns': None, 'params': None },
     ],
     'wikidata_basic_normalized': [
+        { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
         { 'func': remove_diacritics, 'columns': ['input', 'target'], 'params': None },
         { 'func': to_lower, 'columns': ['input', 'target'], 'params': None },
         { 'func': remove_brackets, 'columns': ['input', 'target'], 'params': None },
         { 'func': filter_special_characters, 'columns': None, 'params': {'to_drop': r'#|\$|§|@|"|,,'} },
         { 'func': drop_duplicates, 'columns': None, 'params': None },
         { 'func': filter_equal, 'columns': None, 'params': None },
+        { 'func': filter_large_token_diff, 'columns': None, 'params': None },
+        { 'func': filter_large_character_diff, 'columns': None, 'params': None },
     ],
     'toponym_basic_normalized': [
         { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
@@ -90,6 +93,8 @@ pipelines = {
         { 'func': drop_duplicates, 'columns': None, 'params': None },
         { 'func': filter_equal, 'columns': None, 'params': None },
         { 'func': lambda df: df[['input', 'target']], 'columns': None, 'params': None },
+        { 'func': filter_large_token_diff, 'columns': None, 'params': None },
+        { 'func': filter_large_character_diff, 'columns': None, 'params': None },
     ],
     'wikidata_to_en_normalized': [
         # Pipeline to create WIKIDATA_P_TO_EN_NORMALIZED based on WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
@@ -164,6 +169,7 @@ if __name__ == '__main__':
     # run_pipeline('similarity_train', SIMILARITY_HUMAN_GROUPS, '|', SIMILARITY_P_TRAIN)
     # run_pipeline('similarity_train', SIMILARITY_LOC_GROUPS, '|', SIMILARITY_LOC_TRAIN)
     # run_pipeline('similarity_train', SIMILARITY_ORG_GROUPS, '|', SIMILARITY_ORG_TRAIN)
+    
     run_pipeline('wikidata_basic_normalized', WIKIDATA_HUMAN_PAIRS, '|', WIKIDATA_P_BASIC_NORMALIZED)
     run_pipeline('wikidata_basic_normalized', WIKIDATA_LOC_PAIRS, '|', WIKIDATA_LOC_BASIC_NORMALIZED)
     run_pipeline('wikidata_basic_normalized', WIKIDATA_ORG_PAIRS, '|', WIKIDATA_ORG_BASIC_NORMALIZED)

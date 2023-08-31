@@ -43,6 +43,6 @@ df_per_test[['id', 'input', 'target']].groupby(by=['id', 'input'], as_index=Fals
 df_loc_test[['id', 'input', 'target']].groupby(by=['id', 'input'], as_index=False).agg({'target':lambda x: list(x)}).to_csv(LOC_OUT + 'test.csv', sep='|', encoding='utf-8', index=False)
 df_org_test[['id', 'input', 'target']].groupby(by=['id', 'input'], as_index=False).agg({'target':lambda x: list(x)}).to_csv(ORG_OUT + 'test.csv', sep='|', encoding='utf-8', index=False)
 
-pd.concat([df_p1[['input', 'target']], df_p2[['input', 'target']]]).to_csv(PER_OUT + 'train_val.csv', sep='|', encoding='utf-8', index=False)
-pd.concat([df_o1[['input', 'target']], df_o2[['input', 'target']]]).to_csv(ORG_OUT + 'train_val.csv', sep='|', encoding='utf-8', index=False)
-pd.concat([df_l1[['input', 'target']], df_l2[['input', 'target']], df_l3[['input', 'target']]]).to_csv(LOC_OUT + 'train_val.csv', sep='|', encoding='utf-8', index=False)
+pd.concat([df_p1[['input', 'target']], df_p2[['input', 'target']]]).to_csv(PER_OUT + 'train_val_e1.csv', sep='|', encoding='utf-8', index=False)
+pd.concat([df_o1[['input', 'target']], df_o2[['input', 'target']]]).to_csv(ORG_OUT + 'train_val_e1.csv', sep='|', encoding='utf-8', index=False)
+pd.concat([df_l1[['input', 'target']], df_l2[['input', 'target']], df_l3[['input', 'target']]]).to_csv(LOC_OUT + 'train_val_e1.csv', sep='|', encoding='utf-8', index=False)
