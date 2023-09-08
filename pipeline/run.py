@@ -59,6 +59,17 @@ SIMILARITY_TOPONYM_P_SAMPLE = './data/evaluation/similarity_toponym_p_sample.csv
 SIMILARITY_TOPONYM_LOC_SAMPLE = './data/evaluation/similarity_toponym_loc_sample.csv'
 SIMILARITY_TOPONYM_ORG_SAMPLE = './data/evaluation/similarity_toponym_org_sample.csv'
 
+# EXPERIMENT data
+E1_PER_TRAIN_VAL = './data/experiments/per_train_val_e1.csv'
+E1_LOC_TRAIN_VAL = './data/experiments/loc_train_val_e1.csv'
+E1_ORG_TRAIN_VAL = './data/experiments/org_train_val_e1.csv'
+E1_PER_TEST = './data/experiments/per_test.csv'
+E1_LOC_TEST = './data/experiments/loc_test.csv'
+E1_ORG_TEST = './data/experiments/org_test.csv'
+E2_PER_TRAIN_VAL = './data/experiments/per_train_val_e2.csv'
+E2_LOC_TRAIN_VAL = './data/experiments/loc_train_val_e2.csv'
+E2_ORG_TRAIN_VAL = './data/experiments/org_train_val_e2.csv'
+
 pipelines = {
     'wikidata_similar_pairs_normalized': [
         # Pipeline to create WIKIDATA_P_SIMILAR_PAIRS_NORMALIZED
@@ -125,6 +136,29 @@ pipelines = {
         { 'func': to_lower, 'columns': ['group', 'target'], 'params': None },
         { 'func': drop_duplicates, 'columns': None, 'params': None },
     ],
+    'e2_per': [
+        { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
+        # Removing pairs, that have a token difference of more than N
+        { 'func': filter_large_token_diff, 'columns': None, 'params': {'threshold': 2} },
+        # Removing pairs, where the target is more than N characters longer compared to the input
+        { 'func': filter_large_character_diff, 'columns': None, 'params': {'target_threshold': 12, 'input_threshold': 20} },
+        { 'func': filter_historic_per, 'columns': None, 'params': None },
+        { 'func': filter_abbreviations, 'columns': None, 'params': None },
+    ],
+    'e2_loc': [
+        { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
+        # Removing pairs, that have a token difference of more than N
+        { 'func': filter_large_token_diff, 'columns': None, 'params': {'threshold': 2} },
+        # Removing pairs, where the target is more than N characters longer compared to the input
+        { 'func': filter_large_character_diff, 'columns': None, 'params': {'target_threshold': 12, 'input_threshold': 20} },
+    ],
+    'e2_org': [
+        { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
+        # Removing pairs, that have a token difference of more than N
+        { 'func': filter_large_token_diff, 'columns': None, 'params': {'threshold': 2} },
+        # Removing pairs, where the target is more than N characters longer compared to the input
+        { 'func': filter_large_character_diff, 'columns': None, 'params': {'target_threshold': 15, 'input_threshold': 25} },
+    ]
 }
 
 
@@ -165,17 +199,17 @@ if __name__ == '__main__':
     # df_loc.to_csv(SIMILARITY_TOPONYM_LOC_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
     # df_org.to_csv(SIMILARITY_TOPONYM_ORG_SAMPLE, sep='\t', index=False, header=False, encoding='utf-8')
 
-    # Pipeline
-    # run_pipeline('similarity_train', SIMILARITY_HUMAN_GROUPS, '|', SIMILARITY_P_TRAIN)
-    # run_pipeline('similarity_train', SIMILARITY_LOC_GROUPS, '|', SIMILARITY_LOC_TRAIN)
-    # run_pipeline('similarity_train', SIMILARITY_ORG_GROUPS, '|', SIMILARITY_ORG_TRAIN)
-    
-    run_pipeline('wikidata_basic_normalized', WIKIDATA_HUMAN_PAIRS, '|', WIKIDATA_P_BASIC_NORMALIZED)
-    run_pipeline('wikidata_basic_normalized', WIKIDATA_LOC_PAIRS, '|', WIKIDATA_LOC_BASIC_NORMALIZED)
-    run_pipeline('wikidata_basic_normalized', WIKIDATA_ORG_PAIRS, '|', WIKIDATA_ORG_BASIC_NORMALIZED)
-    run_pipeline('wikidata_basic_normalized', GEONAMES_PAIRS, '|', GEONAMES_BASIC_NORMALIZED)
+    # Pipeline   
+    # run_pipeline('wikidata_basic_normalized', WIKIDATA_HUMAN_PAIRS, '|', WIKIDATA_P_BASIC_NORMALIZED)
+    # run_pipeline('wikidata_basic_normalized', WIKIDATA_LOC_PAIRS, '|', WIKIDATA_LOC_BASIC_NORMALIZED)
+    # run_pipeline('wikidata_basic_normalized', WIKIDATA_ORG_PAIRS, '|', WIKIDATA_ORG_BASIC_NORMALIZED)
+    # run_pipeline('wikidata_basic_normalized', GEONAMES_PAIRS, '|', GEONAMES_BASIC_NORMALIZED)
 
-    run_pipeline('toponym_basic_normalized', TOPONYM_P_LABELED_PAIRS, '|', TOPONYM_P_BASIC_NORMALIZED)
-    run_pipeline('toponym_basic_normalized', TOPONYM_LOC_LABELED_PAIRS, '|', TOPONYM_LOC_BASIC_NORMALIZED)
-    run_pipeline('toponym_basic_normalized', TOPONYM_ORG_LABELED_PAIRS, '|', TOPONYM_ORG_BASIC_NORMALIZED)
+    # run_pipeline('toponym_basic_normalized', TOPONYM_P_LABELED_PAIRS, '|', TOPONYM_P_BASIC_NORMALIZED)
+    # run_pipeline('toponym_basic_normalized', TOPONYM_LOC_LABELED_PAIRS, '|', TOPONYM_LOC_BASIC_NORMALIZED)
+    # run_pipeline('toponym_basic_normalized', TOPONYM_ORG_LABELED_PAIRS, '|', TOPONYM_ORG_BASIC_NORMALIZED)
+
+    run_pipeline('e2_per', E1_PER_TRAIN_VAL, '|', E2_PER_TRAIN_VAL)
+    run_pipeline('e2_loc', E1_LOC_TRAIN_VAL, '|', E2_LOC_TRAIN_VAL)
+    run_pipeline('e2_org', E1_ORG_TRAIN_VAL, '|', E2_ORG_TRAIN_VAL)
     pass
