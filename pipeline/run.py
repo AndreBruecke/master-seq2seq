@@ -139,25 +139,32 @@ pipelines = {
     'e2_per': [
         { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
         # Removing pairs, that have a token difference of more than N
-        { 'func': filter_large_token_diff, 'columns': None, 'params': {'threshold': 2} },
+        { 'func': filter_large_token_diff, 'columns': None, 'params': {'target_threshold': 1, 'input_threshold': 2} },
         # Removing pairs, where the target is more than N characters longer compared to the input
         { 'func': filter_large_character_diff, 'columns': None, 'params': {'target_threshold': 12, 'input_threshold': 20} },
         { 'func': filter_historic_per, 'columns': None, 'params': None },
         { 'func': filter_abbreviations, 'columns': None, 'params': None },
+        { 'func': filter_substr, 'columns': None, 'params': None },
     ],
     'e2_loc': [
         { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
         # Removing pairs, that have a token difference of more than N
-        { 'func': filter_large_token_diff, 'columns': None, 'params': {'threshold': 2} },
+        { 'func': filter_large_token_diff, 'columns': None, 'params': {'target_threshold': 1, 'input_threshold': 2} },
         # Removing pairs, where the target is more than N characters longer compared to the input
         { 'func': filter_large_character_diff, 'columns': None, 'params': {'target_threshold': 12, 'input_threshold': 20} },
+        { 'func': filter_numbers_only, 'columns': None, 'params': None },
+        { 'func': filter_common_loc, 'columns': None, 'params': None },
+        { 'func': filter_substr, 'columns': None, 'params': None },
     ],
     'e2_org': [
         { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
         # Removing pairs, that have a token difference of more than N
-        { 'func': filter_large_token_diff, 'columns': None, 'params': {'threshold': 2} },
+        { 'func': filter_large_token_diff, 'columns': None, 'params': {'target_threshold': 2, 'input_threshold': 3} },
         # Removing pairs, where the target is more than N characters longer compared to the input
         { 'func': filter_large_character_diff, 'columns': None, 'params': {'target_threshold': 15, 'input_threshold': 25} },
+        { 'func': filter_numbers_only, 'columns': None, 'params': None },
+        { 'func': filter_common_org, 'columns': None, 'params': None },
+        { 'func': filter_substr, 'columns': None, 'params': None },
     ]
 }
 

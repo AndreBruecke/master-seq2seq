@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 import re
 from unidecode import unidecode
 from fuzzyset import FuzzySet
@@ -75,12 +76,14 @@ def filter_different_token_length_variants(df: pd.DataFrame, keep_empty=True) ->
 def filter_equal(df: pd.DataFrame) -> pd.DataFrame:
     return df[df['input'] != df['target']]
 
-def filter_large_token_diff(df: pd.DataFrame, threshold=3) -> pd.DataFrame:
+def filter_large_token_diff(df: pd.DataFrame, input_threshold=3, target_threshold=3) -> pd.DataFrame:
     x1 = df['input'].apply(lambda s: len(re.split(r' +|-', s)))
     x2 = df['target'].apply(lambda s: len(re.split(r' +|-', s)))
-    mask = x2 - x1 <= threshold
+    mask = x2 - x1 <= target_threshold
+    mask_2 = x1 - x2 <= input_threshold
     print(df[~mask])
-    return df[mask]
+    print(df[~mask_2])
+    return df[mask & mask_2]
 
 def filter_large_character_diff(df: pd.DataFrame, input_threshold=9999, target_threshold=25) -> pd.DataFrame:
     print(df[(df['input'].str.len() - df['target'].str.len()) > input_threshold])
@@ -103,6 +106,33 @@ def filter_historic_per(df: pd.DataFrame, check_target=True) -> pd.DataFrame:
         df = df[~df['target'].str.contains(r'[^\w][ivx][ivx]+[^\w]') & ~df['target'].str.contains(r'\d')]
         df = df[~df['target'].str.contains(r'^[ivx][ivx]+[^\w]') & ~df['target'].str.contains(r'[^\w][ivx][ivx]+$')]
     return df
+
+def filter_common_loc(df: pd.DataFrame) -> pd.DataFrame:
+    regex = r'( ?river ?| ?creek ?| ?rio ?| ?island ?| ?school ?| ?lake ?| ?church ?| ?afon ?| ?abhainn ?| ?condado ?| ?cemetery ?| ?wadi ?)'
+    i_without_common = df['input'].apply(lambda s: re.sub(regex, '', s).strip())
+    t_without_common = df['target'].apply(lambda s: re.sub(regex, '', s).strip())
+    mask = i_without_common != t_without_common
+    print(df[~mask])
+    return df[mask]
+
+def filter_common_org(df: pd.DataFrame) -> pd.DataFrame:
+    regex = r'( ?international ?| ?internacional ?| ?union ?| ?flughafen ?| ?internationale ?| ?aeroport ?| ?futbol ?| ?bank ?| ?airport ?| ?liga ?)'
+    i_without_common = df['input'].apply(lambda s: re.sub(regex, '', s).strip())
+    t_without_common = df['target'].apply(lambda s: re.sub(regex, '', s).strip())
+    mask = i_without_common != t_without_common
+    print(df[~mask])
+    return df[mask]
+
+def filter_substr(df: pd.DataFrame) -> pd.DataFrame:
+    mask = df.apply(lambda row: row.target.startswith(row.input + ' ') or row.target.endswith(' ' + row.input) or (' '+row.input+' ') in row.target, axis=1)
+    mask_2 = df.apply(lambda row: (row.input.startswith(row.target + ' ') or row.input.endswith(' ' + row.target) or (' '+row.input+' ') in row.target) and random.random() <= 0.5, axis=1)
+    print(df[mask])
+    print(df[mask_2])
+    return df[~mask & ~mask_2]
+
+def filter_numbers_only(df: pd.DataFrame) -> pd.DataFrame:
+    print(df[df['input'].str.isnumeric() | df['target'].str.isnumeric()])
+    return df[~df['input'].str.isnumeric() & ~df['target'].str.isnumeric()]
 
 def filter_abbreviations(df: pd.DataFrame, check_target=True) -> pd.DataFrame:
     df = df[~df['input'].str.contains(r'[^\w]\w\.[^\w]')]
