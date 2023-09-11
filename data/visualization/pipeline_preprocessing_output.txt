@@ -1,0 +1,413 @@
+=========================
+RUNNING PIPELINE: e2_per
+=========================
+        > Running step: <lambda>
+        > Running step: filter_large_token_diff
+                            input                       target
+269               diego velazquez   diego de silva y velazquez
+278               diego velasquez   diego de silva y velazquez
+297                dieqo velaskes   diego de silva y velazquez
+306             didacus velazquez   diego de silva y velazquez
+326               djego velaskess   diego de silva y velazquez
+...                           ...                          ...
+6160214             abou moussaab     abou moussab al zarakoui
+6160233               umar bashir        omer hassan al-bashir
+6160246               omar baszir  omar hassan ahmed el-bashir
+6160277  frank walter steinnmeier    frank-walter - steinmeier
+6160314                 aung saan            aung saan suu kyi
+
+[460530 rows x 2 columns]
+                                                input                   target
+284              diego rodriguez de silva y velazquez          diego velazquez
+285              diego rodriguez de silva y velazquez          diego velasquez
+286              diego rodriguez de silva y velazquez           dieqo velaskes
+287              diego rodriguez de silva y velazquez        didacus velazquez
+289              diego rodriguez de silva y velazquez          djego velaskess
+...                                               ...                      ...
+6159142  nicolas paul stephane sarkozy de nagy bocsas           nicolas sarkoy
+6159254           hamad ibn dzassim ibn dzabr as sani  shaikh hamad bin jassem
+6159334                      abdullah cua a rap saudi        abdullah d'arabia
+6159432                  al-waleed bin talal al-saoed       alwaleed bin talal
+6159912                   elisabeth ii du royaume-uni             ii elizabeth
+
+[162965 rows x 2 columns]
+        > Running step: filter_large_character_diff
+                                               input                 target
+3651                 social and political philosophy             f.a. hayek
+4010                       titus flavius vespasianus                   tito
+4012                       titus flavius vespasianus                    tit
+4018                       titus flavius vespasianus                   tits
+4022                       titus flavius vespasianus                   titu
+...                                              ...                    ...
+6119178   pjotr alexandrowitsch rumjanzew-sadunaiski   alexander rumjantsev
+6121434  aleksandr grigorjevits lukasenkast kirjutis  alexander loekasjenko
+6127506           iohannes raginualdus reuel tolkien            con tolkien
+6127962               jan peter balkenende chretiens              jan-peter
+6160128   pjotr alexandrowitsch rumjanzew sadunaiski   alexander rumyantsev
+
+[8155 rows x 2 columns]
+                          input                               target
+418                 sarl bodler            charles pierre baudelaire
+1863           andrei tarkovsky       andrei arsenjewitsch tarkowski
+1866           andrei tarkovsky     andrej arszenyjevics tarkovszkij
+1879           andrei tarkovski       andrei arsenjewitsch tarkowski
+1882           andrei tarkovski     andrej arszenyjevics tarkovszkij
+...                         ...                                  ...
+6159581  abdul baset al-megrahi  abdelbasset ali mohammed al megrahi
+6159679    mette marit av norge   kronprinsesse mette marit av noreg
+6160039       michail sakasvili    cumhurbathkany mihail saakathvili
+6160076       fedor dostoevskij      fiodor michajlovic dostojevskij
+6160302           sergej lawrov       sergejem viktorovicem lavrovom
+
+[102115 rows x 2 columns]
+        > Running step: filter_historic_per
+5426486 --> 3060975
+        > Running step: filter_abbreviations
+        > Running step: filter_substr
+                    input                   target
+216           george bush          george bush jr.
+220           george bush      george bush, junior
+367      augusto pinochet  augusto pinochet ugarte
+544      nicolas copernic        nicolas copernico
+828       nikola kopernik         nikola koperniku
+...                   ...                      ...
+6158448    nuri al maliki        nuri al malikijem
+6158498     ivan frederic          ivan fredericks
+6158638         al hilali         sheikh al hilali
+6159183      rashid ahmed      sheikh rashid ahmed
+6159268      kim jong ili           kim jong ilile
+
+[75982 rows x 2 columns]
+                             input          target
+195                george bush jr.     george bush
+3059          louis hector berlioz  hector berlioz
+3297               osama bin laden       bin laden
+3377              ossama bin laden       bin laden
+3393               usama bin laden       bin laden
+...                            ...             ...
+6157626         yussaf raza gilani     raza gilani
+6158477      dennis sassou-nguesso  sassou-nguesso
+6159050  abou moussaab al zarqaoui     al zarqaoui
+6159194        mohammad zia ul haq      zia ul haq
+6160159        muhammed bin hammam      bin hammam
+
+[38087 rows x 2 columns]
+        > Running step: filter_short_input
+        input          target
+3780      oto            otho
+3782      oto           othon
+3791      oto            otao
+3793      oto    kaizari otho
+3982      tit  tytus flawiusz
+...       ...             ...
+5956171   per    sankta petro
+5979786   per          pierre
+6003770   per    simon petrus
+6034727   per   petur postuli
+6129596   per     mtume petro
+
+[960 rows x 2 columns]
+        > Running step: filter_common_per
+                       input               target
+28858              al-batani             albatani
+28867               albatani            al-batani
+37743        carlos pena jr.       carlos pena jr
+37744        carlos pena jr.          carlos pena
+37746        carlos pena jr.     carlos pena, jr.
+...                      ...                  ...
+6141965       chun young-woo        chun youngwoo
+6145841  mir-hussein mussawi   mirhussein mussawi
+6154670     abdelilah khatib    abdel-ilah khatib
+6157087   muhammad elbaradei  muhammad el-baradei
+6159271   anna politkovskaia  anna politkov-skaia
+
+[9015 rows x 2 columns]
+
+=========================
+RUNNING PIPELINE: e2_loc
+=========================
+        > Running step: <lambda>
+        > Running step: filter_large_token_diff
+                           input                           target
+21                    antarctica                bara la antaktiki
+23                    antarctica                  tiri o te moana
+24                    antarctica          antaritiki tetv wandamm
+30                    antarctica          goxub dottub bej-saalum
+38                    antarctica                     chau nam cuc
+...                          ...                              ...
+16158010     arabian gulf states  arab states of the persian gulf
+16158033     white island trough   whakaari / white island trough
+16158037     white island trench   whakaari / white island trough
+16158041     white island canyon   whakaari / white island trough
+16158045  whakaari island trough   whakaari / white island trough
+
+[829120 rows x 2 columns]
+                                            input                              target
+1416                              tiri o te moana                          antarctica
+1417                              tiri o te moana                          antarktida
+1419                              tiri o te moana                          antiarktis
+1420                              tiri o te moana                          antarktika
+1421                              tiri o te moana                           antaatika
+...                                           ...                                 ...
+16156745                       dao truong sa dong                           nongbizai
+16157203  association europeenne de libre-echange  europaische freihandelsassoziation
+16157396                   mar de los cosmonautas                      kosmonautensee
+16157793               region du lac de constance                      bodenseeregion
+16158009          arab states of the persian gulf                 arabian gulf states
+
+[212137 rows x 2 columns]
+        > Running step: filter_large_character_diff
+                                                   input            target
+21756                  chilenisches antarktisterritorium         antartica
+21910                 chilijskie terytorium antarktyczne         antartica
+28254                     bushey, hertfordshire, anglija            bushey
+28255                     bushey, hertfordshire, anglija              busi
+31732                        primorsk, leningrad oblasti            bjorko
+...                                                  ...               ...
+16148157            westliches indisches sudpolar becken     valdivia deep
+16153359               israel-jordan demilitarized zones      neutral zone
+16154001  soyuz sovetskikh sotsialisticheskikh respublik   sovetskiy soyuz
+16154003  soyuz sovetskikh sotsialisticheskikh respublik  union sovietique
+16154004  soyuz sovetskikh sotsialisticheskikh respublik       sovjet-unie
+
+[13901 rows x 2 columns]
+                 input                        target
+142         i-antatika       antaritiki tetv wandamm
+1783           ziptu'a          qalasersuaq kujalleq
+2845           antatik          qalasersuaq kujalleq
+6624             grins          groningen, groningen
+6625             grins            gemeente groningen
+...                ...                           ...
+16156489    bai phu my  northeast investigator shoal
+16156490   haikou jiao  investigator northeast shoal
+16156497   haikou jiao  northeast investigator shoal
+16156498  haikou ansha  investigator northeast shoal
+16156505  haikou ansha  northeast investigator shoal
+
+[54968 rows x 2 columns]
+        > Running step: filter_numbers_only
+                       input         target
+119782                     0     kuradisaar
+119783                     0   teufelsinsel
+119784                     0    pulau setan
+119785                     0      djavulson
+119786                     0  duivelseiland
+...                      ...            ...
+15718315               39980   richmond, in
+15718319        richmond, va          40060
+15718321               40060   richmond, va
+15718325  richmond-berea, ky          40080
+15760267    farg'ona ikinchi              1
+
+[51029 rows x 2 columns]
+        > Running step: filter_common_loc
+                                  input                         target
+5351                            lisbona                       lisbon-a
+5856                           lisbon-a                        lisbona
+6114                                 po                         rio po
+6116                                 po                        afon po
+6129                             rio po                             po
+...                                 ...                            ...
+16156007                    west-europa                     westeuropa
+16156020                     westeuropa                    west-europa
+16156410                   yu-ya an-sha                     yuya ansha
+16156457  north-east investigator shoal   northeast investigator shoal
+16156507   northeast investigator shoal  north-east investigator shoal
+
+[364822 rows x 2 columns]
+        > Running step: filter_substr
+                        input                target
+14                 antarctica           antarcticae
+270                antarktika           antarktikaa
+606                 antartida           l'antartida
+1653                antarktid            antarktida
+1703                antarktid            antarktidu
+...                       ...                   ...
+16157808        seguam canyon    west seguam canyon
+16157822          atka canyon      west atka canyon
+16158000  parengarenga canyon  parengarenga canyons
+16158003          pantin bank          pantin banks
+16158020          gorda ridge          gorda ridges
+
+[632783 rows x 2 columns]
+                                   input               target
+3973                           de barein               barein
+6189                           sungai po                   po
+6219                            po nehri                   po
+6234                             song po                   po
+6294                            salog po                   po
+...                                  ...                  ...
+16157761               south viper shoal          viper shoal
+16157796              ann judge seamount       judge seamount
+16157807              west seguam canyon        seguam canyon
+16157821                west atka canyon          atka canyon
+16158029  whakaari / white island trough  white island trough
+
+[318007 rows x 2 columns]
+        > Running step: filter_short_input
+         input     target
+3576       tur      tours
+3577       tur     teurgn
+3581       tur       tors
+6115        po        pad
+6117        po       pado
+...        ...        ...
+16151844   maa       zeme
+16151845   maa       welt
+16151846   maa     ziemia
+16151847   maa   la terdi
+16151849   maa  tiksimuyu
+
+[29098 rows x 2 columns]
+
+=========================
+RUNNING PIPELINE: e2_org
+=========================
+        > Running step: <lambda>
+        > Running step: filter_large_token_diff
+                                     input                                 target
+36        international astronomical union             hiep hoi thien van quoc te
+128      union astronomique internationale             hiep hoi thien van quoc te
+174     internationale astronomische union             hiep hoi thien van quoc te
+220       internasionale astronomiese unie             hiep hoi thien van quoc te
+266       xunion astronomica internacional             hiep hoi thien van quoc te
+...                                    ...                                    ...
+523477            roissy charles de gaulle      san bay quoc te charles-de-gaulle
+523524               vijece europske unije             hoi dong lien minh chau au
+523533              xx olimpiade invernale  xx zimske olimpijske igre torino 2006
+523539                        liga prvakov           liga dels campions de l'uefa
+523583                        mundial 2010      mistrovstvi sveta ve fotbale 2010
+
+[14863 rows x 2 columns]
+                                                    input                            target
+1623                           hiep hoi thien van quoc te  rahvusvaheline astronoomiaunioon
+1651                           hiep hoi thien van quoc te   althjodasamband stjarnfraedinga
+2190                    voiture sans conducteur de google                             waymo
+2199                    voiture sans conducteur de google                             vaymo
+2230    project by google that involves developing tec...                             waymo
+...                                                   ...                               ...
+523372    svjetsko prvenstvo u nogometu juzna afrika 2010           futbala mondpokalo 2010
+523376  institut politeknik dan universitas negeri vir...                     virginia tech
+523398          internationaux de france de roland-garros                        franse ope
+523404  tractat pel qual s'establix una constitucio pe...              constitucion europea
+523507  bandar udara internasional hartsfield jackson ...                 flughafen atlanta
+
+[15708 rows x 2 columns]
+        > Running step: filter_large_character_diff
+                                                    input                       target
+2511          swiatowa federacja mlodziezy demokratycznej                         wfdy
+2570                 demokratikus ifjusagi vilagszovetseg                         wfdy
+2609                   weltbund der demokratischen jugend                         wfdy
+2628                 demokratisk ungdoms varldsfederation                         wfdy
+2647              wereldfederatie van democratische jeugd                         wfdy
+...                                                   ...                          ...
+522721          uluslararasi kizilhac ve kizilay hareketi               punainen risti
+522807  az egyesult nemzetek szervezete biztonsagi tan...       vijece sigurnosti un-a
+523317              oslobodilacki tigrovi tamilskog elama                  macan tamil
+523444          uluslararasi kizilhac ve kizilay hareketi                croix - rouge
+523449  internationaler flughafen johannes paul ii kra...  port lotniczy krakow balice
+
+[4049 rows x 2 columns]
+                                    input                                             target
+2182                                waymo                              google driverless car
+2186                                waymo                           googles sjalvkorande bil
+2187                                waymo                       googlov samovozeci avtomobil
+2188                                waymo                     google autonominis automobilis
+2228                       driverless car                     google autonominis automobilis
+...                                   ...                                                ...
+523325  food and agriculture organisation  organisation pour l'alimentation et l'agriculture
+523452                   istanbul-ataturk          internationale flughafen istanbul ataturk
+523454             john f kennedy airport       john fitzgerald kennedy nemzetkozi repuloter
+523467                 varnostni svet ozn               birlesmis milletler guvenlik konseyi
+523585                  palestiense staot                  palastinensische autonomiebehorde
+
+[11870 rows x 2 columns]
+        > Running step: filter_numbers_only
+                              input                target
+53365                      three uk                     3
+53366                             3              three uk
+68900                  ctt correios              11191477
+68904      ctt correios de portugal              11191477
+68908          correios de portugal              11191477
+68909                      11191477          ctt correios
+68911                      11191477  correios de portugal
+149569               bank of hawaii                     1
+149570                            1        bank of hawaii
+203916                         ebay            9134428075
+203918                    ebay inc.            9134428075
+203919                   9134428075                  ebay
+203920                   9134428075             ebay inc.
+211030                            3                 three
+211031                            3           tre sverige
+211032                            3          hutchison 3g
+211033                            3                   h3g
+211034                        three                     3
+211038                  tre sverige                     3
+211042                 hutchison 3g                     3
+211046                          h3g                     3
+278600  new delhi municipal council                132048
+300187                      21 club                    21
+300188                           21               21 club
+363855                            2                  isc2
+363859                         isc2                     2
+365079                   99 records                    99
+365080                           99            99 records
+        > Running step: filter_common_org
+                                     input                              target
+2867                navistar international                            navistar
+2870                              navistar              navistar international
+6190                             ig farben                         i.g. farben
+6192                           i.g. farben                           ig farben
+6222    junkers flugzeug- und motorenwerke   junkers flugzeug und motorenwerke
+...                                    ...                                 ...
+521560         nauru international airport                     flughafen nauru
+521657                      zagreb airport                    flughafen zagreb
+522427   aeroport roissy charles de gaulle            roissy charles de gaulle
+522457              flughafen philadelphia  philadelphia international airport
+523344                flughafen chiang mai    chiang mai international airport
+
+[1604 rows x 2 columns]
+        > Running step: filter_substr
+                                        input                                   target
+0                                   sabmiller                            sabmiller plc
+73      den internasjonale astronomiske union  den internasjonale astronomiske unionen
+513           union astronomica internacional         xunion astronomica internacional
+551           union astronomica internacional         union astronomica internacionala
+2162                                 nintendo                                nintendos
+...                                       ...                                      ...
+523363                             dax indeks                              dax indeksi
+523387                                beatles                               na beatles
+523402                            tor vergata                      tor vergata de rome
+523424                             intel corp                        intel corporation
+523527                           morgan chase                          jp morgan chase
+
+[11250 rows x 2 columns]
+                                     input                  target
+1                            sabmiller plc               sabmiller
+2166                            adobe inc.                   adobe
+2177                     pivovar starobrno               starobrno
+2203                 google driverless car          driverless car
+2868    navistar international corporation  navistar international
+...                                    ...                     ...
+523412      revolutionary guard qods force              qods force
+523488              patrick ouart van suez                    suez
+523496    pharmafirma merial animal health    merial animal health
+523498                          kia motors                     kia
+523503            mujahideen shura council           shura council
+
+[8209 rows x 2 columns]
+        > Running step: filter_short_input
+       input              target
+3013     att                at&t
+6055     tna    impact wrestling
+6166      bp   british petroleum
+6168      bp    britis petrolewm
+11615    mtg  modern times group
+...      ...                 ...
+520542    eu        union europa
+521209   mi5    security service
+521367    fn                 onu
+521449   mes                 esm
+522734   esm                mede
+
+[543 rows x 2 columns]

@@ -96,6 +96,7 @@ def drop_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop_duplicates()
 
 def filter_historic_per(df: pd.DataFrame, check_target=True) -> pd.DataFrame:
+    print(len(df))
     df = df[~df['input'].str.contains(r' ?.*? (of |de |den |av |di |van |car |da |du |dan |dari |af |von |vo |od |del |der |die |el |vu |han |na |od |lo |cel |the |le |nga |z |o |i |d\').*?')]
     df = df[~df['input'].str.contains(r'(princ|san |pope|papa|pape|paus|emperor|impera|king )')]
     df = df[~df['input'].str.contains(r'[^\w][ivx][ivx]+[^\w]') & ~df['input'].str.contains(r'\d')]
@@ -107,6 +108,7 @@ def filter_historic_per(df: pd.DataFrame, check_target=True) -> pd.DataFrame:
         df = df[~df['target'].str.contains(r'[^\w][ivx][ivx]+[^\w]') & ~df['target'].str.contains(r'\d')]
         df = df[~df['target'].str.contains(r'^[ivx][ivx]+[^\w]') & ~df['target'].str.contains(r'[^\w][ivx][ivx]+$')]
         df = df[~df['target'].str.endswith(' i') & ~df['target'].str.contains(r'[ -]i[\., ]')]
+    print(len(df))
     return df
 
 def filter_common_per(df: pd.DataFrame) -> pd.DataFrame:
