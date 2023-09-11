@@ -145,6 +145,8 @@ pipelines = {
         { 'func': filter_historic_per, 'columns': None, 'params': None },
         { 'func': filter_abbreviations, 'columns': None, 'params': None },
         { 'func': filter_substr, 'columns': None, 'params': None },
+        { 'func': filter_short_input, 'columns': None, 'params': None },
+        { 'func': filter_common_per, 'columns': None, 'params': None },
     ],
     'e2_loc': [
         { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
@@ -155,6 +157,7 @@ pipelines = {
         { 'func': filter_numbers_only, 'columns': None, 'params': None },
         { 'func': filter_common_loc, 'columns': None, 'params': None },
         { 'func': filter_substr, 'columns': None, 'params': None },
+        { 'func': filter_short_input, 'columns': None, 'params': None },
     ],
     'e2_org': [
         { 'func': lambda df: df.dropna(), 'columns': None, 'params': None },
@@ -165,6 +168,7 @@ pipelines = {
         { 'func': filter_numbers_only, 'columns': None, 'params': None },
         { 'func': filter_common_org, 'columns': None, 'params': None },
         { 'func': filter_substr, 'columns': None, 'params': None },
+        { 'func': filter_short_input, 'columns': None, 'params': None },
     ]
 }
 

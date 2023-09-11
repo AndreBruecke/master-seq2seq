@@ -100,15 +100,25 @@ def filter_historic_per(df: pd.DataFrame, check_target=True) -> pd.DataFrame:
     df = df[~df['input'].str.contains(r'(princ|san |pope|papa|pape|paus|emperor|impera|king )')]
     df = df[~df['input'].str.contains(r'[^\w][ivx][ivx]+[^\w]') & ~df['input'].str.contains(r'\d')]
     df = df[~df['input'].str.contains(r'^[ivx]+[^\w]') & ~df['input'].str.contains(r'[^\w][ivx]+$')]
+    df = df[~df['input'].str.endswith(' i') & ~df['input'].str.contains(r'[ -]i[\., ]')]
     if check_target:
         df = df[~df['target'].str.contains(r' ?.*? (of |de |den |av |di |van |car |da |du |dan |dari |af |von |vo |od |del |der |die |el |vu |han |na |od |lo |cel |the |le |nga |z |o |i |d\').*?')]
         df = df[~df['target'].str.contains(r'(princ|san |pope|papa|pape|paus|emperor|impera|king )')]
         df = df[~df['target'].str.contains(r'[^\w][ivx][ivx]+[^\w]') & ~df['target'].str.contains(r'\d')]
         df = df[~df['target'].str.contains(r'^[ivx][ivx]+[^\w]') & ~df['target'].str.contains(r'[^\w][ivx][ivx]+$')]
+        df = df[~df['target'].str.endswith(' i') & ~df['target'].str.contains(r'[ -]i[\., ]')]
     return df
 
+def filter_common_per(df: pd.DataFrame) -> pd.DataFrame:
+    regex = r'( ?jr\. ?| jr ?|,|-|\.)'
+    i_without_common = df['input'].apply(lambda s: re.sub(regex, '', s).strip())
+    t_without_common = df['target'].apply(lambda s: re.sub(regex, '', s).strip())
+    mask = i_without_common != t_without_common
+    print(df[~mask])
+    return df[mask]
+
 def filter_common_loc(df: pd.DataFrame) -> pd.DataFrame:
-    regex = r'( ?river ?| ?creek ?| ?rio ?| ?island ?| ?school ?| ?lake ?| ?church ?| ?afon ?| ?abhainn ?| ?condado ?| ?cemetery ?| ?wadi ?)'
+    regex = r'( ?river ?| ?creek ?| ?rio ?| ?island ?| ?school ?| ?lake ?| ?church ?| ?afon ?| ?abhainn ?| ?condado ?| ?cemetery ?| ?wadi ?|,|-|\.)'
     i_without_common = df['input'].apply(lambda s: re.sub(regex, '', s).strip())
     t_without_common = df['target'].apply(lambda s: re.sub(regex, '', s).strip())
     mask = i_without_common != t_without_common
@@ -116,7 +126,7 @@ def filter_common_loc(df: pd.DataFrame) -> pd.DataFrame:
     return df[mask]
 
 def filter_common_org(df: pd.DataFrame) -> pd.DataFrame:
-    regex = r'( ?international ?| ?internacional ?| ?union ?| ?flughafen ?| ?internationale ?| ?aeroport ?| ?futbol ?| ?bank ?| ?airport ?| ?liga ?)'
+    regex = r'( ?international ?| ?internacional ?| ?union ?| ?flughafen ?| ?internationale ?| ?aeroport ?| ?futbol ?| ?bank ?| ?airport ?| ?liga ?|,|-|\.)'
     i_without_common = df['input'].apply(lambda s: re.sub(regex, '', s).strip())
     t_without_common = df['target'].apply(lambda s: re.sub(regex, '', s).strip())
     mask = i_without_common != t_without_common
@@ -124,11 +134,15 @@ def filter_common_org(df: pd.DataFrame) -> pd.DataFrame:
     return df[mask]
 
 def filter_substr(df: pd.DataFrame) -> pd.DataFrame:
-    mask = df.apply(lambda row: row.target.startswith(row.input + ' ') or row.target.endswith(' ' + row.input) or (' '+row.input+' ') in row.target, axis=1)
-    mask_2 = df.apply(lambda row: (row.input.startswith(row.target + ' ') or row.input.endswith(' ' + row.target) or (' '+row.input+' ') in row.target) and random.random() <= 0.5, axis=1)
+    mask = df.apply(lambda row: row.target.startswith(row.input) or row.target.endswith(row.input), axis=1)
+    mask_2 = df.apply(lambda row: (row.input.startswith(row.target + ' ') or row.input.endswith(' ' + row.target) or (' '+row.input+' ') in row.target) and random.random() <= 0.75, axis=1)
     print(df[mask])
     print(df[mask_2])
     return df[~mask & ~mask_2]
+
+def filter_short_input(df: pd.DataFrame) -> pd.DataFrame:
+    print(df[df['input'].str.len() < 4])
+    return df[df['input'].str.len() >= 4]
 
 def filter_numbers_only(df: pd.DataFrame) -> pd.DataFrame:
     print(df[df['input'].str.isnumeric() | df['target'].str.isnumeric()])
